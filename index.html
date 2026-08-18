@@ -1,0 +1,3530 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<title>SeaCast 365 RC5 Live •</title>
+<style>
+:root{
+ --navy:#002b54;
+ --navy2:#001d3b;
+ --gold:#ffc52f;
+ --teal:#08b9c6;
+ --ink:#071d34;
+ --card:#fff;
+ --bg:#eaf1f5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+.app{max-width:520px;margin:0 auto;background:#fff;min-height:100vh;box-shadow:0 0 30px rgba(0,0,0,.14)}
+.top{padding:16px 18px 10px;background:#fff;position:sticky;top:0;z-index:10}
+.toprow{display:grid;grid-template-columns:92px 1fr 44px;align-items:center;gap:6px}
+.menu,.bell{font-size:29px;text-align:center;color:var(--ink)}
+.logo{text-align:center;display:flex;align-items:center;justify-content:center}
+.logo img{display:block;max-width:190px;max-height:92px;width:auto;height:auto;object-fit:contain}
+.badge{position:absolute;margin-left:-10px;margin-top:-8px;background:#ed2224;color:white;font-size:11px;font-weight:800;border-radius:99px;padding:3px 6px}
+.hero{height:250px;position:relative;overflow:hidden;background:
+linear-gradient(100deg,rgba(0,55,88,.55),rgba(0,0,0,.05)),
+radial-gradient(circle at 74% 20%,#ff3900 0 7%,#ffb000 9% 15%,#19ad5b 17% 27%,transparent 31%),
+linear-gradient(130deg,#1775b7 0 43%,#70a55e 43% 100%)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,20,45,.28))}
+.weather{position:absolute;z-index:2;top:18px;left:14px;background:rgba(0,24,46,.82);color:#fff;padding:13px 15px;border-radius:10px;width:154px}
+.weather .label{font-size:11px;font-weight:800;letter-spacing:.4px}
+.temp{font-size:50px;font-weight:800;line-height:1;margin:7px 0}
+.weather .small{font-size:13px}
+.location{position:absolute;z-index:2;bottom:16px;left:18px;color:#fff;font-size:17px;font-weight:750}
+.radarbtn{position:absolute;z-index:2;right:14px;bottom:44px;background:rgba(0,24,46,.88);color:#fff;border:0;padding:13px 16px;border-radius:10px;font-weight:800;font-size:14px}
+.section{border-radius:16px 16px 0 0;padding:18px 14px 16px;margin-top:-1px;position:relative}
+.yellow{background:linear-gradient(135deg,#ffbd16,#ffd64f)}
+.navy{background:linear-gradient(135deg,#002e5d,#001f3f);color:#fff}
+.teal{background:linear-gradient(135deg,#02b4c0,#10c6cd);color:#fff}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.sec-title{font-size:24px;font-weight:900;letter-spacing:.2px}
+.sec-sub{font-size:13px;font-weight:800;color:#ffcf43;margin-top:4px}
+.zone{border:1px solid rgba(0,0,0,.25);padding:8px 12px;border-radius:10px;font-size:12px;font-weight:800;min-width:160px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.tile{background:#fff;color:#071d34;border:0;border-radius:11px;min-height:108px;padding:12px 6px 8px;text-align:center;font-weight:800;font-size:12px;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.tile .ico{font-size:30px;display:block;margin-bottom:7px}
+.service-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:16px 0}
+.service{padding:3px 6px;text-align:center;border-right:1px solid rgba(255,255,255,.45);font-size:12px;font-weight:800}
+.service:last-child{border-right:0}
+.service .ico{font-size:31px;display:block;margin-bottom:6px}
+.preferred-service-tile{appearance:none;-webkit-appearance:none;background:transparent;color:inherit;border-top:0;border-bottom:0;border-left:0;font:inherit;min-height:112px;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer}
+.preferred-service-tile:active{background:rgba(255,255,255,.12);transform:scale(.98)}
+.preferred-service-tile span:last-child{display:block;line-height:1.25}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action{border-radius:8px;padding:14px 10px;text-align:center;font-weight:900;font-size:12px;border:2px solid #f6bd29}
+.action.primary{background:#ffc533;color:#102744}
+.action.secondary{background:transparent;color:#fff}
+.exchange-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.exchange-grid .tile{min-height:120px}
+.bottom{position:sticky;bottom:0;background:#03294c;color:#fff;display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:9}
+.nav{text-align:center;font-size:11px}
+.nav .ico{display:block;font-size:26px;margin-bottom:3px}
+.nav.map{margin-top:-20px}
+.nav.map .circle{width:72px;height:72px;margin:0 auto;border-radius:50%;background:#0dc5d0;display:grid;place-items:center;font-size:32px;border:2px solid #013b59}
+.nav.map span:last-child{display:block;margin-top:-7px}
+.modal{position:fixed;inset:0;background:rgba(0,18,36,.76);display:none;align-items:flex-end;justify-content:center;z-index:300}
+.modal.show{display:flex}
+.sheet{background:#fff;width:min(520px,100%);max-height:82vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px}
+.sheet h2{margin:0 0 4px;color:var(--navy)}
+.sheet p{margin:0 0 14px;color:#526273}
+.list{display:grid;gap:9px}
+.item{padding:13px;border:1px solid #d9e2ea;border-radius:10px;font-weight:800;display:flex;justify-content:space-between;gap:10px}
+.coming{font-size:11px;color:#9b6900;background:#fff1bc;padding:4px 7px;border-radius:20px}
+.close{width:100%;margin-top:14px;border:0;background:var(--navy);color:#fff;padding:13px;border-radius:10px;font-weight:900}
+@media(max-width:430px){.grid,.exchange-grid{grid-template-columns:repeat(5,1fr)}.tile{font-size:10px;padding-left:3px;padding-right:3px}.sec-title{font-size:21px}.service{font-size:10px}.zone{min-width:135px}}
+
+.location{left:auto!important;right:14px!important;bottom:14px!important;text-align:right!important;font-size:15px!important}
+.radarbtn{bottom:46px!important}
+.tile.emergency-tile{background:#d71920!important;color:#fff!important;border:2px solid #9e1015!important}
+.tile.emergency-tile .ico{filter:none}
+.emergency-note{display:block;font-size:9px;line-height:1.15;margin-top:5px;font-weight:700}
+.emergency-sheet .emergency-choice{width:100%;display:flex;align-items:center;justify-content:space-between;
+ border:1px solid #d9e2ea;background:#fff;padding:14px 13px;border-radius:10px;margin-bottom:9px;
+ font-weight:800;color:#071d34;text-align:left}
+.emergency-sheet .emergency-choice.danger{background:#d71920;color:#fff;border-color:#9e1015}
+.emergency-sheet .emergency-choice.call911{background:#8d0b10;color:#fff;border-color:#6d080c}
+.alert-live{background:#fff2f2;border:1px solid #e5a7aa;color:#8d0b10;border-radius:10px;padding:12px;margin:10px 0;font-weight:800}
+
+.visibility-bar{
+ background:#ffffff;
+ border-top:1px solid #dde6ed;
+ border-bottom:1px solid #d5e0e8;
+ padding:10px 14px 12px;
+}
+.visibility-wrap{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+}
+.visibility-copy{
+ min-width:0;
+}
+.visibility-title{
+ font-size:14px;
+ font-weight:900;
+ color:#071d34;
+ line-height:1.1;
+}
+.visibility-sub{
+ font-size:10px;
+ color:#607284;
+ margin-top:3px;
+ font-weight:700;
+}
+.visibility-toggle{
+ position:relative;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ width:142px;
+ height:42px;
+ border-radius:24px;
+ overflow:hidden;
+ border:2px solid #ccd7df;
+ flex:0 0 auto;
+ background:#eceff2;
+ cursor:pointer;
+ user-select:none;
+}
+.visibility-toggle button{
+ border:0;
+ font-size:12px;
+ font-weight:900;
+ color:#fff;
+ cursor:pointer;
+}
+.visibility-toggle .yes{
+ background:#18a84a;
+ opacity:.36;
+}
+.visibility-toggle .no{
+ background:#d71920;
+ opacity:1;
+}
+.visibility-toggle.is-on .yes{
+ opacity:1;
+}
+.visibility-toggle.is-on .no{
+ opacity:.36;
+}
+.visibility-toggle:not(.is-on) .yes{
+ opacity:.36;
+}
+.visibility-toggle:not(.is-on) .no{
+ opacity:1;
+}
+.visibility-status{
+ margin-top:7px;
+ padding:7px 10px;
+ border-radius:9px;
+ background:#eaf8ef;
+ color:#126c32;
+ font-size:10px;
+ font-weight:800;
+}
+.visibility-status.off{
+ background:#fff0f0;
+ color:#a20f16;
+}
+
+.seatow-tile{background:#ffd321!important;color:#111!important;border:2px solid #1a1a1a!important}
+.seatow-logo{
+ display:block;
+ width:54px;
+ height:30px;
+ object-fit:contain;
+ margin:0 auto 7px;
+ background:#111;
+ border-radius:4px;
+}
+.seatow-card{
+ background:#ffd321;
+ border:2px solid #111;
+ border-radius:14px;
+ padding:16px;
+ color:#111;
+ text-align:center;
+}
+.seatow-card img{
+ display:block;
+ max-width:230px;
+ width:80%;
+ height:auto;
+ margin:2px auto 12px;
+ background:#111;
+ border-radius:6px;
+}
+.seatow-call{
+ display:block;
+ text-decoration:none;
+ background:#111;
+ color:#fff;
+ padding:14px 12px;
+ border-radius:10px;
+ font-weight:900;
+ margin:10px 0;
+}
+.seatow-link{
+ display:block;
+ text-decoration:none;
+ background:#fff;
+ color:#111;
+ border:2px solid #111;
+ padding:12px;
+ border-radius:10px;
+ font-weight:900;
+ margin:9px 0;
+}
+.seatow-small{font-size:12px;line-height:1.45;text-align:left;margin-top:12px}
+
+.progressive-strip{
+ background:#0b69b7;
+ color:#fff;
+ overflow:hidden;
+ white-space:nowrap;
+ border-bottom:2px solid #084f8a;
+ font-weight:900;
+ font-size:13px;
+ letter-spacing:.2px;
+ padding:8px 0;
+}
+.progressive-track{
+ display:inline-block;
+ padding-left:100%;
+ animation:progressiveScroll 16s linear infinite;
+}
+.progressive-strip a{color:#fff;text-decoration:none}
+@keyframes progressiveScroll{
+ from{transform:translateX(0)}
+ to{transform:translateX(-100%)}
+}
+.seatow-bottom-ad{
+ background:#ffd321;
+ color:#111;
+ border-top:3px solid #111;
+ padding:14px 14px 18px;
+ display:grid;
+ grid-template-columns:1fr 92px;
+ gap:12px;
+ align-items:center;
+}
+.seatow-bottom-ad h3{
+ margin:0 0 5px;
+ font-size:18px;
+}
+.seatow-bottom-ad p{
+ margin:0 0 8px;
+ font-size:12px;
+ line-height:1.35;
+ font-weight:700;
+}
+.seatow-bottom-ad .mini-actions{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+}
+.seatow-bottom-ad .mini-actions a{
+ text-decoration:none;
+ background:#111;
+ color:#fff;
+ border-radius:8px;
+ padding:8px 10px;
+ font-size:11px;
+ font-weight:900;
+}
+.seatow-bottom-ad img{
+ width:92px;
+ height:92px;
+ background:#fff;
+ padding:5px;
+ border-radius:8px;
+ border:2px solid #111;
+}
+.seatow-bottom-ad .qr-label{
+ text-align:center;
+ font-size:9px;
+ font-weight:900;
+ margin-top:3px;
+}
+
+.otw-sheet .quick-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+ margin-top:12px;
+}
+.otw-card{
+ border:1px solid #d9e2ea;
+ border-radius:11px;
+ padding:13px;
+ background:#fff;
+ font-weight:800;
+}
+.otw-card small{
+ display:block;
+ font-weight:650;
+ color:#5d6c7a;
+ margin-top:4px;
+ line-height:1.35;
+}
+.otw-action{
+ display:block;
+ width:100%;
+ border:0;
+ background:#002b54;
+ color:#fff;
+ border-radius:10px;
+ padding:13px;
+ font-weight:900;
+ margin-top:10px;
+ text-align:center;
+ text-decoration:none;
+}
+.otw-action.alt{background:#08aeb9}
+.activity-choice{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ width:100%;
+ padding:13px;
+ margin:8px 0;
+ border:1px solid #d8e1e9;
+ border-radius:10px;
+ background:#fff;
+ font-weight:900;
+ color:#071d34;
+}
+.activity-choice.selected{
+ background:#e8f8f9;
+ border-color:#08aeb9;
+}
+.small-note{
+ font-size:11px;
+ line-height:1.4;
+ color:#607284;
+ margin-top:8px;
+}
+
+.live-weather-status{
+ padding:10px 12px;
+ border-radius:10px;
+ background:#eef5f8;
+ font-size:12px;
+ font-weight:800;
+ margin-bottom:10px;
+}
+.live-weather-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+.live-weather-card{
+ border:1px solid #d9e2ea;
+ border-radius:11px;
+ padding:13px;
+ background:#fff;
+}
+.live-weather-card b{
+ display:block;
+ font-size:18px;
+ color:#071d34;
+}
+.live-weather-card small{
+ display:block;
+ color:#607284;
+ margin-top:4px;
+ line-height:1.35;
+ font-weight:700;
+}
+.live-weather-alert{
+ margin-top:10px;
+ padding:11px 12px;
+ border-radius:10px;
+ background:#fff4e5;
+ color:#8a4b00;
+ font-size:12px;
+ font-weight:800;
+}
+.live-weather-alert.danger{
+ background:#fff0f0;
+ color:#a20f16;
+}
+
+.hash-page{
+ display:none;
+ position:fixed;
+ inset:0;
+ z-index:100;
+ background:#eef3f6;
+ overflow:auto;
+}
+.hash-page:target{display:block}
+.hash-head{
+ position:sticky;top:0;z-index:3;
+ background:#002b54;color:#fff;
+ padding:14px 15px;
+ display:flex;align-items:center;gap:12px;
+}
+.hash-back{
+ display:inline-block;text-decoration:none;
+ color:#fff;background:rgba(255,255,255,.15);
+ padding:9px 11px;border-radius:9px;font-weight:900
+}
+.hash-title{font-size:19px;font-weight:900}
+.hash-body{padding:14px;max-width:520px;margin:0 auto}
+.weather-zone-banner{
+ background:#fff;border:1px solid #d7e1e8;border-radius:12px;
+ padding:12px;margin-bottom:12px;font-weight:800;color:#17324c
+}
+.weather-zone-banner small{display:block;color:#627383;margin-top:3px}
+
+.radar-live-note{
+ position:absolute;
+ z-index:2;
+ right:14px;
+ bottom:27px;
+ color:#fff;
+ font-size:10px;
+ font-weight:900;
+ background:rgba(0,24,46,.72);
+ padding:4px 7px;
+ border-radius:7px;
+}
+
+.boater-map-panel{
+ margin-top:12px;
+ border:1px solid #d7e1e8;
+ border-radius:14px;
+ overflow:hidden;
+ background:#dfeaf0;
+}
+.boater-map-canvas{
+ position:relative;
+ height:420px;
+ background:
+ linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.04)),
+ radial-gradient(circle at 28% 25%,rgba(125,170,92,.95) 0 18%,transparent 18.5%),
+ radial-gradient(circle at 74% 38%,rgba(125,170,92,.95) 0 22%,transparent 22.5%),
+ radial-gradient(circle at 58% 78%,rgba(125,170,92,.95) 0 23%,transparent 23.5%),
+ #5fa8d3;
+}
+.boater-map-canvas:before{
+ content:"CHARLOTTE HARBOR";
+ position:absolute;left:36%;top:44%;
+ color:rgba(255,255,255,.8);font-weight:900;font-size:18px;letter-spacing:1px;
+}
+.boat-pin{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ border:2px solid #fff;
+ background:#0b6f8f;
+ color:#fff;
+ width:40px;height:40px;
+ border-radius:50%;
+ display:grid;place-items:center;
+ font-size:20px;
+ box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.boat-label{
+ position:absolute;
+ transform:translate(-50%,0);
+ background:#fff;
+ border:1px solid #c8d5de;
+ border-radius:8px;
+ padding:5px 7px;
+ font-size:10px;
+ font-weight:900;
+ color:#17324c;
+ white-space:nowrap;
+}
+.boater-controls{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin:12px 0;
+}
+.boater-controls label{
+ display:flex;align-items:center;gap:8px;
+ background:#fff;border:1px solid #d7e1e8;
+ border-radius:10px;padding:10px;
+ font-size:12px;font-weight:850;
+}
+.boater-controls input{accent-color:#0aa9b6}
+.boater-choice{
+ width:100%;
+ border:1px solid #d8e1e9;
+ background:#fff;
+ padding:12px;
+ border-radius:10px;
+ margin:7px 0;
+ text-align:left;
+ font-weight:900;
+}
+.boater-choice.selected{background:#e7f7f8;border-color:#0aa9b6}
+.boat-pin.hidden,.boat-label.hidden{display:none}
+
+.boater-map-canvas{
+ background:#cfe1ea!important;
+ overflow:hidden;
+}
+.boater-map-canvas:before{display:none!important}
+.boater-map-canvas .osm-map{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ border:0;
+ z-index:0;
+ pointer-events:none;
+}
+.boater-map-canvas .map-shade{
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+ box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);
+}
+.boater-map-canvas .boat-pin,
+.boater-map-canvas .boat-label{
+ z-index:2;
+}
+.map-view-label{
+ position:absolute;
+ z-index:3;
+ left:10px;
+ top:10px;
+ background:rgba(0,43,84,.9);
+ color:#fff;
+ border-radius:8px;
+ padding:7px 9px;
+ font-size:10px;
+ font-weight:900;
+ letter-spacing:.4px;
+ pointer-events:none;
+}
+.map-credit{
+ position:absolute;
+ z-index:3;
+ right:6px;
+ bottom:5px;
+ background:rgba(255,255,255,.88);
+ color:#24445e;
+ border-radius:5px;
+ padding:3px 5px;
+ font-size:8px;
+ font-weight:700;
+ pointer-events:none;
+}
+
+.zone-boater-count{
+ margin:8px 0 14px;
+ background:rgba(255,255,255,.92);
+ border:1px solid rgba(7,29,52,.18);
+ border-radius:10px;
+ padding:10px 12px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ font-weight:900;
+ color:#071d34;
+}
+.zone-boater-count .count{
+ background:#002b54;
+ color:#fff;
+ min-width:38px;
+ height:30px;
+ padding:0 9px;
+ border-radius:18px;
+ display:grid;
+ place-items:center;
+ font-size:14px;
+}
+.zone-boater-count small{
+ display:block;
+ margin-top:2px;
+ font-size:10px;
+ color:#607284;
+ font-weight:750;
+}
+
+.exchange-choice{
+  display:block;
+  width:100%;
+  border:1px solid #d6e1e8;
+  background:#fff;
+  color:#071d34;
+  border-radius:11px;
+  padding:14px 13px;
+  margin:9px 0;
+  text-align:left;
+  font-weight:900;
+  font-size:14px;
+}
+.exchange-choice small{
+  display:block;
+  margin-top:4px;
+  color:#607284;
+  font-size:11px;
+  line-height:1.35;
+  font-weight:700;
+}
+.exchange-choice.primary{
+  background:#08b9c6;
+  color:#fff;
+  border-color:#0796a1;
+}
+.exchange-choice.primary small{color:#eaffff}
+.exchange-form{
+  display:grid;
+  gap:9px;
+  margin-top:12px;
+}
+.exchange-form input,
+.exchange-form textarea,
+.exchange-form select{
+  width:100%;
+  border:1px solid #cfdbe3;
+  border-radius:10px;
+  padding:12px;
+  font:inherit;
+  background:#fff;
+}
+.exchange-form textarea{min-height:90px;resize:vertical}
+.exchange-info{
+  background:#edf8fa;
+  border:1px solid #b8e4e8;
+  color:#194955;
+  padding:11px 12px;
+  border-radius:10px;
+  font-size:11px;
+  line-height:1.4;
+  font-weight:750;
+  margin:9px 0;
+}
+
+.exchange-page{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:120;
+  background:#eef3f6;
+  overflow:auto;
+}
+.exchange-page:target{display:block}
+.exchange-page-head{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:#08b9c6;
+  color:#fff;
+  padding:14px 15px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.exchange-page-head a{
+  text-decoration:none;
+  color:#fff;
+  background:rgba(0,0,0,.18);
+  padding:9px 11px;
+  border-radius:9px;
+  font-weight:900;
+}
+.exchange-page-title{font-size:19px;font-weight:900}
+.exchange-page-body{
+  padding:14px;
+  max-width:520px;
+  margin:0 auto;
+}
+.exchange-native-link{
+  display:block;
+  width:100%;
+  text-decoration:none;
+  border:1px solid #d6e1e8;
+  background:#fff;
+  color:#071d34;
+  border-radius:11px;
+  padding:14px 13px;
+  margin:9px 0;
+  font-weight:900;
+  font-size:14px;
+}
+.exchange-native-link.primary{
+  background:#08b9c6;
+  color:#fff;
+  border-color:#0796a1;
+}
+.exchange-native-link small{
+  display:block;
+  margin-top:4px;
+  font-size:11px;
+  line-height:1.35;
+  font-weight:700;
+  color:#607284;
+}
+.exchange-native-link.primary small{color:#eaffff}
+.exchange-form-page label{
+  display:block;
+  font-size:12px;
+  font-weight:900;
+  margin:10px 0 5px;
+}
+.exchange-form-page input,
+.exchange-form-page textarea,
+.exchange-form-page select{
+  width:100%;
+  border:1px solid #cfdbe3;
+  border-radius:10px;
+  padding:12px;
+  font:inherit;
+  background:#fff;
+}
+.exchange-form-page textarea{min-height:90px}
+.exchange-submit{
+  width:100%;
+  border:0;
+  background:#002b54;
+  color:#fff;
+  padding:13px;
+  border-radius:10px;
+  font-weight:900;
+  margin-top:13px;
+}
+
+.exchange-scope-block{
+  background:#fff;
+  border:1px solid #d6e1e8;
+  border-radius:14px;
+  padding:13px;
+  margin:12px 0;
+}
+.exchange-scope-title{
+  font-size:17px;
+  font-weight:900;
+  color:#071d34;
+  margin-bottom:8px;
+}
+.exchange-scope-sub{
+  font-size:11px;
+  color:#607284;
+  font-weight:700;
+  margin-bottom:10px;
+}
+.exchange-pair{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.exchange-pair a{
+  text-decoration:none;
+  text-align:center;
+  padding:13px 8px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:900;
+  border:1px solid #0796a1;
+}
+.exchange-pair .sell{
+  background:#08b9c6;
+  color:#fff;
+}
+.exchange-pair .browse{
+  background:#fff;
+  color:#071d34;
+}
+
+.rental-company{
+  background:#fff;
+  border:1px solid #d7e1e8;
+  border-radius:12px;
+  padding:13px;
+  margin:9px 0;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:12px;
+}
+.rental-company-name{
+  font-size:14px;
+  font-weight:900;
+  color:#071d34;
+}
+.rental-company small{
+  display:block;
+  margin-top:3px;
+  color:#607284;
+  font-size:10px;
+  font-weight:700;
+}
+.rental-site-btn{
+  display:inline-block;
+  text-decoration:none;
+  background:#08b9c6;
+  color:#fff;
+  border-radius:9px;
+  padding:10px 12px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.region-choice{
+  display:block;
+  text-decoration:none;
+  background:#fff;
+  border:1px solid #d7e1e8;
+  color:#071d34;
+  border-radius:12px;
+  padding:14px;
+  margin:9px 0;
+  font-weight:900;
+}
+.region-choice small{
+  display:block;
+  color:#607284;
+  font-size:11px;
+  margin-top:4px;
+  font-weight:700;
+}
+
+.otw-category{
+  margin:12px 0 8px;
+}
+.otw-category-title{
+  font-size:13px;
+  font-weight:950;
+  color:#071d34;
+  margin:0 0 7px 2px;
+  letter-spacing:.25px;
+}
+.otw-category-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+.otw-category-grid.four{
+  grid-template-columns:repeat(4,1fr);
+}
+.otw-category-grid .tile{
+  width:100%;
+  min-height:108px;
+}
+@media(max-width:430px){
+  .otw-category-grid,
+  .otw-category-grid.four{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+.otw-main-three{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:10px;
+}
+.otw-main-btn{
+  min-height:122px;
+  border-radius:13px;
+  border:2px solid rgba(7,29,52,.16);
+  background:#fff;
+  color:#071d34;
+  text-decoration:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:12px 7px;
+  font-weight:950;
+  font-size:13px;
+}
+.otw-main-btn .main-ico{
+  font-size:34px;
+  margin-bottom:8px;
+}
+.otw-main-btn.emergency-main{
+  background:#d71920;
+  color:#fff;
+  border-color:#9e1015;
+}
+.otw-menu-page .menu-item{
+  display:block;
+  width:100%;
+  text-decoration:none;
+  border:1px solid #d8e1e9;
+  background:#fff;
+  color:#071d34;
+  padding:14px;
+  border-radius:11px;
+  margin:9px 0;
+  font-weight:900;
+}
+.otw-menu-page .menu-item small{
+  display:block;
+  color:#607284;
+  margin-top:4px;
+  font-size:11px;
+  font-weight:700;
+}
+@media(max-width:430px){
+  .otw-main-three{grid-template-columns:repeat(3,1fr)}
+  .otw-main-btn{font-size:11px;min-height:112px}
+}
+
+.emergency-stack{
+  align-self:start;
+  margin-top:-10px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:5px;
+  text-align:center;
+}
+.header-emergency{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-height:40px;
+  padding:7px 6px;
+  border-radius:11px;
+  background:#d71920;
+  color:#fff;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:950;
+  line-height:1.05;
+  box-shadow:0 4px 10px rgba(215,25,32,.22);
+}
+.header-emergency .sos{font-size:18px;line-height:1}
+.current-members{
+  color:#002b54;
+  font-size:9px;
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:.2px;
+  white-space:nowrap;
+}
+.current-members strong{
+  display:block;
+  margin-top:2px;
+  color:#159447;
+  font-size:14px;
+  line-height:1;
+  letter-spacing:.1px;
+}
+.trip-planner-main{background:#159447!important;color:#fff!important;border-color:#0e7435!important}
+.trip-planner-main .main-ico{filter:none}
+.trip-page{display:none;position:fixed;inset:0;z-index:80;background:#f4f8fb;overflow:auto}
+.trip-page:target{display:block}
+.trip-head{
+  position:sticky;top:0;z-index:2;background:#002b54;color:#fff;
+  padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.trip-head a{color:#fff;text-decoration:none;font-size:24px;font-weight:900}
+.trip-title{text-align:center;flex:1}
+.trip-title b{display:block;font-size:19px}
+.trip-title small{display:block;font-size:11px;opacity:.9;margin-top:2px}
+.trip-body{max-width:520px;margin:0 auto;padding:15px}
+.trip-card{background:#fff;border:1px solid #dbe5ed;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 3px 10px rgba(0,0,0,.04)}
+.trip-card h3{margin:0 0 10px;font-size:15px;color:#071d34}
+.trip-field{display:block;margin:10px 0}
+.trip-field span{display:block;font-size:10px;font-weight:900;color:#607284;margin-bottom:5px;text-transform:uppercase;letter-spacing:.35px}
+.trip-field input,.trip-field select{
+  width:100%;border:1px solid #cad8e3;border-radius:10px;padding:11px 12px;font:inherit;background:#fff;color:#071d34
+}
+.trip-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.destination-list{display:grid;gap:8px}
+.destination-row{
+  display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #d9e3ea;border-radius:11px;padding:10px
+}
+.destination-row .num{
+  width:26px;height:26px;border-radius:50%;background:#0b5b9d;color:#fff;font-size:12px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex:0 0 26px
+}
+.destination-row .dest-main{flex:1;min-width:0}
+.destination-row .dest-main b{display:block;font-size:13px}
+.destination-row .dest-main small{display:block;color:#607284;font-size:10px;margin-top:2px}
+.destination-row button{border:0;background:#eef4f8;color:#9b1519;border-radius:8px;padding:7px 9px;font-weight:900}
+.trip-action{
+  width:100%;border:0;border-radius:11px;padding:13px;font-size:13px;font-weight:950;margin-top:8px
+}
+.trip-action.green{background:#159447;color:#fff}
+.trip-action.blue{background:#0b5b9d;color:#fff}
+.trip-action.outline{background:#fff;color:#0b5b9d;border:1px solid #0b5b9d}
+.trip-summary{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px
+}
+.trip-stat{background:#f5f9fc;border:1px solid #dbe5ed;border-radius:11px;padding:10px;text-align:center}
+.trip-stat small{display:block;color:#607284;font-size:9px;font-weight:900;text-transform:uppercase}
+.trip-stat b{display:block;font-size:18px;color:#002b54;margin-top:3px}
+.dest-picker{
+  display:none;position:fixed;inset:0;z-index:120;background:rgba(0,24,46,.66);padding:18px;overflow:auto
+}
+.dest-picker.show{display:flex;align-items:flex-start;justify-content:center}
+.dest-sheet{width:min(100%,500px);background:#f8fbfd;border-radius:18px;overflow:hidden;margin:auto;box-shadow:0 20px 50px rgba(0,0,0,.28)}
+.dest-sheet-head{background:#002b54;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.dest-sheet-head b{font-size:18px}
+.dest-close{border:0;background:rgba(255,255,255,.15);color:#fff;border-radius:50%;width:34px;height:34px;font-size:20px}
+.dest-sheet-body{padding:14px}
+.dest-section-title{font-size:12px;font-weight:950;color:#002b54;margin:12px 0 7px}
+.dest-option{
+  width:100%;text-align:left;border:1px solid #d7e1e8;background:#fff;border-radius:10px;padding:11px 12px;margin:6px 0;color:#071d34
+}
+.dest-option b{display:block;font-size:13px}
+.dest-option small{display:block;color:#607284;font-size:10px;margin-top:3px}
+
+
+.trip-mode-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.trip-mode-toggle button{border:1px solid #bdd0de;background:#fff;color:#0b5b9d;border-radius:10px;padding:10px;font-weight:900}
+.trip-mode-toggle button.active{background:#0b5b9d;color:#fff;border-color:#0b5b9d}
+.stop-time-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.stop-time-grid label{font-size:9px;font-weight:900;color:#607284;text-transform:uppercase}
+.stop-time-grid input{width:100%;margin-top:4px;border:1px solid #cad8e3;border-radius:8px;padding:8px;font:inherit}
+.manual-total-note{font-size:11px;color:#607284;margin-top:8px;line-height:1.4}
+
+
+.passenger-picker-wrap{margin-top:4px}
+.passenger-picker{
+  width:100%;
+  height:112px;
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  border:1px solid #cad8e3;
+  border-radius:10px;
+  background:#fff;
+  position:relative;
+  -webkit-overflow-scrolling:touch;
+}
+.passenger-picker::before,
+.passenger-picker::after{
+  content:'';
+  display:block;
+  height:36px;
+  scroll-snap-align:none;
+}
+.passenger-option{
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  scroll-snap-align:center;
+  font-size:20px;
+  font-weight:900;
+  color:#607284;
+}
+.passenger-option.selected{
+  color:#002b54;
+  background:#eef6fb;
+}
+.passenger-selected{
+  margin-top:6px;
+  text-align:center;
+  font-size:11px;
+  font-weight:900;
+  color:#0b5b9d;
+}
+
+
+.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.schedule-block{background:#fff;border:1px solid #dbe5ed;border-radius:12px;padding:12px}
+.schedule-block h4{margin:0 0 8px;color:#002b54;font-size:13px}
+.schedule-textarea{
+  width:100%;min-height:120px;border:1px solid #cad8e3;border-radius:10px;
+  padding:11px 12px;font:inherit;background:#fff;color:#071d34;resize:vertical;
+  line-height:1.45
+}
+.schedule-textarea.large{min-height:180px}
+.schedule-note{font-size:11px;line-height:1.45;color:#607284;margin-top:6px}
+@media(max-width:520px){.schedule-grid{grid-template-columns:1fr}}
+
+
+.preferred-link{width:100%;background:#fff;color:#102744;font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,.08);touch-action:manipulation}
+.preferred-link:active{transform:scale(.995);background:#f3f7fa}
+</style>
+<style id="preferred-native-mobile-css">
+.preferred-native-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin:16px 0;
+}
+.preferred-native-card{
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.preferred-native-card summary{
+  list-style:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:rgba(255,255,255,.18);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:68px;
+  padding:12px 14px;
+  font-size:16px;
+  font-weight:900;
+  color:#fff;
+  user-select:none;
+}
+.preferred-native-card summary::-webkit-details-marker{display:none}
+.preferred-native-card summary .ico{font-size:28px;min-width:34px}
+.preferred-native-card summary:after{
+  content:"OPEN ›";
+  margin-left:auto;
+  font-size:12px;
+  font-weight:900;
+  color:#ffd338;
+}
+.preferred-native-card[open] summary:after{content:"CLOSE ×"}
+.preferred-provider-list{
+  background:#fff;
+  color:#06386b;
+  padding:10px;
+}
+.preferred-provider{
+  border:1px solid #d9e2ea;
+  border-radius:12px;
+  padding:12px;
+  margin:8px 0;
+  background:#f8fafc;
+  font-size:15px;
+  line-height:1.25;
+}
+.preferred-provider small{
+  display:block;
+  margin-top:5px;
+  color:#4b5966;
+  font-size:11px;
+  font-weight:800;
+}
+@media(min-width:700px){
+  .preferred-native-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<!-- SeaCast 365 Release Candidate 2 • 2026-08-17 -->
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#002b54">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SeaCast 365">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+
+<!-- RC5: production Supabase + live map dependencies -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<!-- RC6 uses a built-in Supabase client fallback so account buttons do not depend on a CDN. -->
+<style id="rc5-live-backend-styles">
+.auth-status-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900;background:#eef3f7;color:#52677a;margin-left:6px}
+.auth-status-pill.live{background:#dff5e7;color:#0d6a33}
+.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.auth-note{font-size:12px;color:#607284;line-height:1.45;margin-top:8px}
+.auth-error{display:none;margin-top:10px;padding:9px 10px;border-radius:10px;background:#fff0f0;color:#a01919;font-size:12px;font-weight:800}
+.auth-live{display:none;margin-top:8px;padding:10px;border-radius:12px;background:#eaf8ef;color:#0d6a33;font-weight:800}
+#liveLeafletMap{position:absolute;inset:0;z-index:1;background:#d9e8ef}
+.live-map-status{margin-top:9px;padding:9px 10px;border-radius:10px;background:#eef6fb;color:#17324c;font-size:12px;font-weight:800}
+.live-map-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.live-map-actions button{border:0;border-radius:10px;padding:11px 8px;font-weight:900;cursor:pointer}
+.live-map-actions .locate{background:#0b78d0;color:white}.live-map-actions .refresh{background:#e8eef3;color:#17324c}
+.leaflet-tooltip.sc365-boat-label{font-weight:900;border:0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.sc365-live-dot{width:18px;height:18px;border-radius:50%;background:#0b78d0;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.account-delete-error{display:none;margin-top:10px;padding:9px 10px;border-radius:10px;background:#fff0f0;color:#a01919;font-size:12px;font-weight:800}
+@media(max-width:520px){.auth-actions,.live-map-actions{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+<div class="app">
+<div class="progressive-strip">
+<div class="progressive-track">
+<a href="https://www.progressive.com/boat/" rel="noopener" target="_blank">
+ PROGRESSIVE BOAT INSURANCE • GET A BOAT INSURANCE QUOTE • TAP HERE TO LEARN MORE •
+ PROGRESSIVE BOAT INSURANCE • GET A BOAT INSURANCE QUOTE • TAP HERE TO LEARN MORE
+ </a>
+</div>
+</div>
+<header class="top">
+<div class="toprow">
+<div class="emergency-stack">
+<a class="header-emergency" href="#emergencyMenu" aria-label="Emergency"><span class="sos">🚨</span><span>EMERGENCY</span></a>
+<div class="current-members">CURRENT MEMBERS<strong>101,414</strong></div>
+</div>
+<div class="logo"><img alt="SeaCast 365 official logo" src="data:image/webp;base64,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"/></div>
+<div class="bell">🔔<span class="badge">3</span></div>
+</div>
+</header>
+<section class="visibility-bar" id="visibilityBar">
+<div class="visibility-wrap">
+<div class="visibility-copy">
+<div class="visibility-title">MAKE MYSELF KNOWN</div>
+<div class="visibility-sub">NO is the safe default. Choose YES only when you want to appear on the SeaCast map.</div>
+</div>
+<div aria-label="Make myself known" class="visibility-toggle" id="visibilityToggle" role="group">
+<button class="no" onclick="setVisibility(false)" type="button">NO</button>
+<button class="yes" onclick="setVisibility(true)" type="button">YES</button>
+</div>
+</div>
+<div class="visibility-status off" id="visibilityStatus">● NO — You are not visible to other SeaCast boaters.</div>
+</section>
+<section class="hero">
+<div class="weather">
+<div class="label">CURRENT CONDITIONS</div>
+<div class="temp">87°</div>
+<div class="small">Partly Cloudy</div>
+<hr style="border:0;border-top:1px solid rgba(255,255,255,.35)"/>
+<div class="small"><b>WIND</b><br/>SE   12 mph</div>
+<div class="small" style="margin-top:8px"><b>WATER TEMP</b>   82°F</div>
+</div>
+<a class="radarbtn" href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJ3ZWF0aGVyIiwiY2VudGVyIjpbLTgyLjEsMjYuOTddLCJ6b29tIjo4LCJsb2NhdGlvbiI6Wy04Mi4xLDI2Ljk3XX0sImFuaW1hdGluZyI6dHJ1ZSwiYmFzZSI6InN0YW5kYXJkIiwiYXJ0Y2MiOmZhbHNlLCJjb3VudHkiOmZhbHNlLCJjd2EiOmZhbHNlLCJyZmMiOmZhbHNlLCJzdGF0ZSI6ZmFsc2UsIm1lbnUiOnRydWUsInNob3J0RnVzZWRPbmx5IjpmYWxzZSwib3BhY2l0eSI6eyJhbGVydHMiOjAuNiwibG9jYWwiOjAuNiwibG9jYWxTdGF0aW9ucyI6MC44LCJuYXRpb25hbCI6MC42fX0%3D" rel="noopener" style="text-decoration:none;display:inline-block;" target="_blank">▶ LIVE RADAR</a>
+<div class="location">📍 Port Charlotte, FL</div>
+<div class="radar-live-note">LIVE • CHARLOTTE HARBOR</div></section>
+<section class="section yellow">
+<div class="sec-head">
+<div class="sec-title">🌊 ON THE WATER</div>
+<div class="zone">YOUR ZONE<br/>📍 Charlotte Harbor ›</div>
+</div>
+<div class="zone-boater-count">
+<div>
+ CURRENT BOATERS IN MY ZONE
+ <small>Charlotte Harbor • Current Zone Activity</small>
+</div>
+<div class="count">6</div>
+</div>
+
+<div class="otw-main-three">
+<a class="otw-main-btn trip-planner-main" href="#tripPlannerPage">
+<span class="main-ico">🧭</span>
+    TRIP SCHEDULE
+  </a>
+<a class="otw-main-btn" href="#weatherMapsMenu">
+<span class="main-ico">🌦️</span>
+    WEATHER &amp; MAPS
+  </a>
+<a class="otw-main-btn" href="#marinasFoodMenu">
+<span class="main-ico">⚓</span>
+    MARINAS &amp; FOOD
+  </a>
+</div>
+
+</section>
+<section class="section navy">
+<div class="sec-head">
+<div>
+<div class="sec-title">🛡️ MARINE PREFERRED SERVICES</div>
+<div class="sec-sub">VETTED. TRUSTED. TOP RATED.</div>
+<div style="font-size:12px;margin-top:6px">Only the best marine service providers. No exceptions.</div>
+</div>
+<div style="font-size:42px">⭐</div>
+</div>
+<div id="preferredServicesNative" class="preferred-native-grid">
+<details class="preferred-native-card">
+  <summary><span class="ico">🔧</span><span>Marine Mechanics</span></summary>
+  <div class="preferred-provider-list">
+    <div class="preferred-provider"><b>1. 3M Boat Mechanic — Mike’s Mobile Mechanic</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>2. TIPPET Dockside Service</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>3. Gasparilla Marine Service</b><small>SeaCast 365 Preferred Provider</small></div>
+  </div>
+</details>
+
+<details class="preferred-native-card">
+  <summary><span class="ico">✨</span><span>Detailing &amp; Cleaning</span></summary>
+  <div class="preferred-provider-list">
+    <div class="preferred-provider"><b>1. Harbor Shine Marine Detailing</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>2. Salt &amp; Sun Boat Care</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>3. Bluewater Detail Works</b><small>SeaCast 365 Preferred Provider</small></div>
+  </div>
+</details>
+
+<details class="preferred-native-card">
+  <summary><span class="ico">🖥️</span><span>Electronics &amp; GPS</span></summary>
+  <div class="preferred-provider-list">
+    <div class="preferred-provider"><b>1. Coastal Marine Electronics</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>2. HarborTech Navigation &amp; Audio</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>3. Gulf Signal Marine Systems</b><small>SeaCast 365 Preferred Provider</small></div>
+  </div>
+</details>
+
+<details class="preferred-native-card">
+  <summary><span class="ico">🪑</span><span>Canvas &amp; Upholstery</span></summary>
+  <div class="preferred-provider-list">
+    <div class="preferred-provider"><b>1. Seabreeze Canvas &amp; Upholstery</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>2. Dockside Stitch Marine Interiors</b><small>SeaCast 365 Preferred Provider</small></div>
+    <div class="preferred-provider"><b>3. Gulf Coast Canvas Works</b><small>SeaCast 365 Preferred Provider</small></div>
+  </div>
+</details>
+</div>
+<div style="font-size:11px;font-weight:900;text-align:center;margin:-5px 0 14px;letter-spacing:.2px">
+UP TO 3 PROVIDERS PER CATEGORY • MUST MAINTAIN 9.0/10 OR BETTER
+</div>
+<div class="actions">
+<a class="action primary" href="#preferredServicesNative" style="text-decoration:none;display:block">VIEW PREFERRED SERVICES ›</a>
+<div class="action secondary" onclick="openApply()">APPLY TO BECOME A PREFERRED PROVIDER ›</div>
+</div>
+</section>
+<section class="section teal">
+<div class="sec-title" style="margin-bottom:14px">↔ THE EXCHANGE</div>
+<div class="exchange-grid">
+<a class="tile" href="#rentBoatPage" style="text-decoration:none;display:block;"><span class="ico">🛥️</span>Rent A Boat</a>
+<a class="tile" href="#sellBuyBoatPage" style="text-decoration:none;display:block;"><span class="ico">💲</span>Sell or Buy A Boat</a>
+<a class="tile" href="#gearPage" style="text-decoration:none;display:block;"><span class="ico">🎣</span>Gear &amp; Equipment</a>
+<a class="tile" href="#jobsPage" style="text-decoration:none;display:block;"><span class="ico">💼</span>Jobs On The Water</a>
+<button class="tile" onclick="openEventsPromotions()"><span class="ico">📅</span>Events &amp; Promotions</button>
+</div>
+</section>
+<section class="seatow-bottom-ad">
+<div>
+<h3>SEA TOW — ON-WATER ASSISTANCE</h3>
+<p>Need help on the water? Contact Sea Tow directly or scan the QR code for Sea Tow information.</p>
+<div class="mini-actions">
+<a href="tel:18004732869">📞 CALL 800-473-2869</a>
+<a href="https://seatow.com/" rel="noopener" target="_blank">OPEN SEA TOW</a>
+</div>
+</div>
+<div>
+<img alt="QR code for Sea Tow" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeAQAAAAB6HIMaAAAB8UlEQVR4nO2YTYrcQAyFv+oyZFl1g7lIQH2DHGmYm5WPMgcYkJeGMi8LuelepJNVaC1GGP9p8xBP76lUxNM4Ls9z8J38VxI5QNWoGhMmSFFvmxnRmqTqVt0Ud6lK8oRoF6BgwGSU5vBRmrP1+pWQCfdk6dTP67K9s11TAPpDLOezffxcCh1ta523v+nQXgBpAFWDNo63cZQrTfOFgJ7HqQlujxeQUhMWmgA29oW5QLfjzSOXzx0eFEyq0myaJyuUr7ZBWpNEG+ERNMlJyQQk0eIaVWM2nTahlLV1m23ICecFFC8ZmXAB6ud7CGzVkMbRWbC5XTMqmDSj184JYciZMHPy1plNYLQxsepWNcBmRiYgSdJsD/3lzDZSzmDRU1FPIFT3LHJGtG40yW1i9VbnqpFSwS5AdcrbAPa+lr4u2N5fCuh5SCOE63TeaDQnKROk6gZG02zi7hQp0bqFeUV/hUTUxM6r0NjbnDAxpZ3B3OR2GgSETVQp6QzmVKc6tFE9wAOWFG2EIw05tBHVzsoEOFssRhrjnBYSor2cBwfWo5S9s7QPYLIeJeHEeN/VCJavX3uhfvUCyniKfEyutPFDY+9MOPrrAf0tub3vfT26VY/PhEy4ndCl6qc+gMVeNF+X3Xc1YRABezalVLDyvcn/b8nfxH+lOMC5oAQAAAAASUVORK5CYII="/>
+<div class="qr-label">SCAN FOR SEA TOW</div>
+</div>
+</section>
+<nav class="bottom" aria-label="SeaCast 365 main navigation">
+<a class="nav" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});"><span class="ico">🏠</span>Home</a>
+<a class="nav" href="#myProfilePage"><span class="ico">👤</span>My Profile</a>
+<a class="nav map" href="#boatersMapLive"><span class="circle">🗺️</span><span>MAP</span></a>
+<a class="nav" href="#messagesPage"><span class="ico">💬</span>Messages</a>
+<a class="nav" href="#settingsPage"><span class="ico">⚙️</span>Settings</a>
+</nav>
+
+<section class="hash-page" id="myProfilePage">
+  <div class="hash-head"><a class="hash-back" href="#">‹ BACK</a><div class="hash-title">My Profile</div></div>
+  <div class="hash-body">
+    <div class="weather-zone-banner">👤 MY SEACAST 365 PROFILE<small>Your boating profile connected to your SeaCast 365 account.</small></div>
+    <div class="nav-page-card" id="seaCastAuthCard">
+      <h3>SeaCast 365 Account <span class="auth-status-pill" id="authStatusPill">SIGNED OUT</span></h3>
+      <div id="authSignedOut">
+        <label class="nav-field"><span>EMAIL</span><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <label class="nav-field"><span>PASSWORD</span><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"></label>
+        <div class="auth-actions">
+          <button class="nav-primary" type="button" onclick="seaCastSignIn()">SIGN IN</button>
+          <button class="nav-secondary" type="button" onclick="seaCastSignUp()">CREATE ACCOUNT</button>
+        </div>
+        <div class="auth-note">New accounts may need to confirm their email before the first sign-in.</div>
+        <div class="auth-error" id="authError"></div>
+      </div>
+      <div id="authSignedIn" class="auth-live">
+        ✓ Signed in as <span id="authUserEmail"></span>
+        <button class="nav-secondary" style="margin-top:9px" type="button" onclick="seaCastSignOut()">SIGN OUT</button>
+      </div>
+    </div>
+    <div class="nav-page-card">
+      <h3>Boater Information</h3>
+      <label class="nav-field"><span>NAME / BOAT NAME</span><input id="profileName" placeholder="Your name or boat name"></label>
+      <label class="nav-field"><span>HOME MARINA</span><input id="profileMarina" value="Gasparilla Marina" placeholder="Home marina"></label>
+      <label class="nav-field"><span>BOAT TYPE</span><input id="profileBoatType" placeholder="Center console, pontoon, sailboat..."></label>
+      <label class="nav-field"><span>BOAT LENGTH</span><input id="profileBoatLength" inputmode="decimal" placeholder="Example: 24 ft"></label>
+      <label class="nav-field"><span>PHONE OR EMAIL</span><input id="profileContact" placeholder="Optional contact information"></label>
+      <button class="nav-primary" type="button" onclick="saveSeaCastProfile()">SAVE PROFILE</button>
+      <div class="nav-success" id="profileSaved">✓ Profile saved to SeaCast 365.</div>
+    </div>
+    <div class="nav-page-card">
+      <h3>My Boating Status</h3>
+      <div id="profileActivityText" style="font-weight:800;color:#17324c">Activity: Not selected</div>
+      <button class="nav-secondary" type="button" onclick="if(typeof openBoatActivity==='function'){location.hash='';setTimeout(openBoatActivity,80)}">CHANGE MY ACTIVITY</button>
+    </div>
+  </div>
+</section>
+
+<section class="hash-page" id="messagesPage">
+  <div class="hash-head"><a class="hash-back" href="#">‹ BACK</a><div class="hash-title">Messages</div></div>
+  <div class="hash-body">
+    <div class="weather-zone-banner">💬 SEACAST 365 MESSAGES<small>Marina, community, and boating notices.</small></div>
+    <div class="nav-message"><b>SeaCast 365</b><div>Welcome to the Charlotte Harbor zone.</div><small>System message</small></div>
+    <div class="nav-message"><b>Home Marina</b><div id="savedMarinaMessage">Your home marina notices will appear here.</div><small>Marina message area</small></div>
+    <div class="nav-page-card">
+      <h3>New Message / Note</h3>
+      <label class="nav-field"><span>TO</span><select id="messageTo"><option>Home Marina</option><option>SeaCast 365 Support</option><option>My Boating Group</option></select></label>
+      <label class="nav-field"><span>MESSAGE</span><textarea id="messageBody" placeholder="Type a message..."></textarea></label>
+      <button class="nav-primary" type="button" onclick="saveSeaCastMessage()">SAVE MESSAGE</button>
+      <div class="nav-success" id="messageSaved">✓ Message saved on this device. Live sending will connect to the SeaCast backend at launch.</div>
+    </div>
+  </div>
+</section>
+
+<section class="hash-page" id="settingsPage">
+  <div class="hash-head"><a class="hash-back" href="#">‹ BACK</a><div class="hash-title">Settings</div></div>
+  <div class="hash-body">
+    <div class="weather-zone-banner">⚙️ SEACAST 365 SETTINGS<small>Control map visibility and app preferences.</small></div>
+    <div class="nav-page-card">
+      <div class="settings-row"><div class="settings-copy"><b>Make Myself Known</b><small>Show or hide your boating status on the Boaters Map.</small></div><button id="settingsVisibility" class="settings-toggle off" type="button" onclick="toggleSettingsVisibility()">NO</button></div>
+      <div class="settings-row"><div class="settings-copy"><b>App Notifications</b><small>Remember whether SeaCast notifications should be enabled.</small></div><button id="settingsNotifications" class="settings-toggle on" type="button" onclick="toggleSetting('seacastNotifications','settingsNotifications')">YES</button></div>
+      <div class="settings-row"><div class="settings-copy"><b>Marina Messages</b><small>Remember whether home-marina messages should be shown.</small></div><button id="settingsMarinaMessages" class="settings-toggle on" type="button" onclick="toggleSetting('seacastMarinaMessages','settingsMarinaMessages')">YES</button></div>
+    </div>
+    <div class="nav-page-card">
+      <h3>Current Zone</h3>
+      <div style="font-weight:900;color:#17324c">📍 Charlotte Harbor</div>
+      <div style="font-size:12px;color:#607284;margin-top:5px">Port Charlotte / Charlotte Harbor current SeaCast zone.</div>
+    </div>
+    <div class="nav-page-card account-danger-card">
+      <h3>Account &amp; Privacy</h3>
+      <div class="account-danger-copy">Permanently delete your SeaCast 365 account and associated personal data. This cannot be undone.</div>
+      <button class="account-delete-button" type="button" onclick="openDeleteAccountConfirm()">DELETE MY ACCOUNT</button>
+      <div class="nav-success account-delete-success" id="accountDeleteSuccess">✓ Your SeaCast 365 account data has been deleted.</div>
+    </div>
+  </div>
+</section>
+
+<div class="account-delete-modal" id="accountDeleteModal" role="dialog" aria-modal="true" aria-labelledby="accountDeleteTitle" aria-hidden="true">
+  <div class="account-delete-dialog">
+    <div class="account-delete-icon">⚠️</div>
+    <h2 id="accountDeleteTitle">Delete SeaCast 365 Account?</h2>
+    <p>This will permanently remove your profile, boating status, saved trip schedule, saved messages, and SeaCast 365 preferences associated with this account.</p>
+    <p class="account-delete-legal">Some records may be retained only when required by law.</p>
+    <div class="account-delete-actions">
+      <button class="account-cancel-button" type="button" onclick="closeDeleteAccountConfirm()">CANCEL</button>
+      <button class="account-confirm-delete-button" id="accountConfirmDeleteButton" type="button" onclick="deleteSeaCastAccount()">PERMANENTLY DELETE</button>
+    </div>
+    <div class="account-delete-error" id="accountDeleteError"></div>
+  </div>
+</div>
+<section class="hash-page" id="weatherLive">
+<div class="hash-head">
+<a class="hash-back" href="#">‹ BACK</a>
+<div class="hash-title">Weather &amp; Radar</div>
+</div>
+<div class="hash-body">
+<div class="weather-zone-banner">📍 CHARLOTTE HARBOR / PORT CHARLOTTE<small>Live radar centered on this zone.</small></div>
+<div class="live-weather-status" id="wxPageStatus">Loading live Charlotte Harbor weather…</div>
+<div class="live-weather-grid">
+<div class="live-weather-card"><small>Temperature</small><b id="wxPageTemp">--</b><small id="wxPageCondition">Loading…</small></div>
+<div class="live-weather-card"><small>Wind</small><b id="wxPageWind">--</b><small id="wxPageWindDir">Charlotte Harbor</small></div>
+<div class="live-weather-card"><small>Humidity</small><b id="wxPageHumidity">--</b><small>Current observation</small></div>
+<div class="live-weather-card"><small>Forecast</small><b id="wxPageShort">--</b><small id="wxPageForecast">Loading current forecast…</small></div>
+</div>
+<div id="wxPageAlerts"></div>
+<button class="otw-action alt" onclick="loadCharlotteHarborWeatherPage()" type="button">↻ REFRESH LIVE WEATHER</button>
+<a class="otw-action" href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJ3ZWF0aGVyIiwiY2VudGVyIjpbLTgyLjEsMjYuOTddLCJ6b29tIjo4LCJsb2NhdGlvbiI6Wy04Mi4xLDI2Ljk3XX0sImFuaW1hdGluZyI6dHJ1ZSwiYmFzZSI6InN0YW5kYXJkIiwiYXJ0Y2MiOmZhbHNlLCJjb3VudHkiOmZhbHNlLCJjd2EiOmZhbHNlLCJyZmMiOmZhbHNlLCJzdGF0ZSI6ZmFsc2UsIm1lbnUiOnRydWUsInNob3J0RnVzZWRPbmx5IjpmYWxzZSwib3BhY2l0eSI6eyJhbGVydHMiOjAuNiwibG9jYWwiOjAuNiwibG9jYWxTdGF0aW9ucyI6MC44LCJuYXRpb25hbCI6MC42fX0%3D" rel="noopener" target="_blank">🌧 OPEN LIVE NWS RADAR</a>
+<a class="otw-action" href="https://marine.weather.gov/MapClick.php?zoneid=GMZ836" rel="noopener" target="_blank">⚓ CHARLOTTE HARBOR MARINE FORECAST</a>
+<div class="small-note">If live conditions cannot load inside the preview, the two official National Weather Service buttons above will still open the live radar and marine forecast.</div>
+</div>
+</section>
+<section class="hash-page" id="boatersMapLive">
+<div class="hash-head">
+<a class="hash-back" href="#">‹ BACK</a>
+<div class="hash-title">Boaters Map</div>
+</div>
+<div class="hash-body">
+<div class="weather-zone-banner">📍 CHARLOTTE HARBOR / PORT CHARLOTTE<small>Charlotte Harbor SeaCast boater activity.</small></div>
+<div class="boater-controls">
+<label><input checked="" id="showBoats" type="checkbox"/> Show Boats</label>
+<label><input checked="" id="showNames" type="checkbox"/> Show Names</label>
+<label><input checked="" id="showActivities" type="checkbox"/> Show Activities</label>
+<label><input checked="" id="showEmergencies" type="checkbox"/> Show Emergencies</label>
+</div>
+<div class="boater-map-panel">
+<div class="boater-map-canvas" id="boaterMapCanvas"><div id="liveLeafletMap" aria-label="Live SeaCast 365 Boaters Map"></div><div class="map-view-label" style="z-index:500">LIVE • CHARLOTTE HARBOR</div></div>
+</div>
+<div class="live-map-status" id="liveMapStatus">Real map ready. Sign in and tap LOCATE ME to show your position privately. Turn Make Myself Known to YES only when you want other SeaCast boaters to see you.</div>
+<div class="live-map-actions"><button class="locate" type="button" onclick="sc365LocateMe()">📍 LOCATE ME</button><button class="refresh" type="button" onclick="refreshLiveBoaterMap()">↻ REFRESH LIVE MAP</button></div>
+<div class="otw-card" style="margin-top:12px">
+<b>HOW DO YOU WANT TO BE SEEN?</b>
+<small>Choose the activity other SeaCast boaters will see with your boat.</small>
+</div>
+<button class="boater-choice" data-visibility="Cruising" onclick="chooseActivity('Cruising','🚤')">🚤 Cruising</button>
+<button class="boater-choice" data-visibility="Sailing" onclick="chooseActivity('Sailing','⛵')">⛵ Sailing</button>
+<button class="boater-choice" data-visibility="Fishing" onclick="chooseActivity('Fishing','🎣')">🎣 Fishing</button>
+<button class="boater-choice" data-visibility="Swimming" onclick="chooseActivity('Swimming','🏊')">🏊 Swimming</button>
+<button class="boater-choice" data-visibility="Diving" onclick="chooseActivity('Diving','🤿')">🤿 Diving</button>
+<div class="small-note" id="boaterVisibilityNote">
+ Your top “Make Myself Known” control determines whether your activity appears on the SeaCast map.
+ </div>
+</div>
+</section>
+<section class="exchange-page" id="sellBuyBoatPage">
+<div class="exchange-page-head">
+<a href="#">‹ BACK</a>
+<div class="exchange-page-title">Sell or Buy a Boat</div>
+</div>
+<div class="exchange-page-body">
+<div class="weather-zone-banner">THE EXCHANGE — BOATS
+  <small>Choose local or the entire SeaCast community.</small>
+</div>
+<div class="exchange-scope-block">
+<div class="exchange-scope-title">📍 IN MY REGION</div>
+<div class="exchange-scope-sub">Charlotte Harbor region — listings appear across participating SeaCast marina sites in this region.</div>
+<div class="exchange-pair">
+<a class="sell" href="#sellBoatRegionForm">💲 SELL A BOAT</a>
+<a class="browse" href="#browseBoatsRegion">🛥️ BUY / BROWSE</a>
+</div>
+</div>
+<div class="exchange-scope-block">
+<div class="exchange-scope-title">🌎 ENTIRE SEACAST COMMUNITY</div>
+<div class="exchange-scope-sub">Use the broader SeaCast network instead of staying local.</div>
+<div class="exchange-pair">
+<a class="sell" href="#sellBoatCommunityForm">💲 SELL A BOAT</a>
+<a class="browse" href="#browseBoatsCommunity">🛥️ BUY / BROWSE</a>
+</div>
+</div>
+</div>
+</section><section class="exchange-page" id="regionBoatPage">
+<div class="exchange-page-head">
+<a href="#sellBuyBoatPage">‹ BACK</a>
+<div class="exchange-page-title">Boats — My Region</div>
+</div>
+<div class="exchange-page-body">
+<div class="exchange-info">Listings here are intended to appear across participating SeaCast marina sites in the Charlotte Harbor region.</div>
+<a class="exchange-native-link primary" href="#sellBoatRegionForm">💲 SELL A BOAT
+      <small>Create a regional boat listing.</small>
+</a>
+<a class="exchange-native-link" href="#browseBoatsRegion">🛥️ BUY / BROWSE BOATS
+      <small>View boats for sale in the Charlotte Harbor region.</small>
+</a>
+</div>
+</section><section class="exchange-page" id="communityBoatPage">
+<div class="exchange-page-head">
+<a href="#sellBuyBoatPage">‹ BACK</a>
+<div class="exchange-page-title">Boats — SeaCast Community</div>
+</div>
+<div class="exchange-page-body">
+<a class="exchange-native-link primary" href="#sellBoatCommunityForm">💲 SELL A BOAT
+      <small>Create a SeaCast-wide boat listing.</small>
+</a>
+<a class="exchange-native-link" href="#browseBoatsCommunity">🛥️ BUY / BROWSE BOATS
+      <small>View boats across the SeaCast community.</small>
+</a>
+</div>
+</section><section class="exchange-page exchange-form-page" id="sellBoatRegionForm">
+<div class="exchange-page-head">
+<a href="#regionBoatPage">‹ BACK</a>
+<div class="exchange-page-title">List a Boat — My Region</div>
+</div>
+<div class="exchange-page-body">
+<label>Boat make / model</label><input placeholder="Example: Hurricane SunDeck 2200"/>
+<label>Year</label><input placeholder="2013"/>
+<label>Length</label><input placeholder="22 ft"/>
+<label>Asking price</label><input placeholder="$"/>
+<label>Your name</label><input placeholder="Name"/>
+<label>Phone or email</label><input placeholder="Contact information"/>
+<label>Description</label><textarea placeholder="Boat description"></textarea>
+<button class="exchange-submit" id="submitRegionBoat" type="button">SUBMIT BOAT LISTING</button>
+<div aria-live="polite" class="exchange-info" id="regionBoatResult" style="display:none"></div>
+</div>
+</section><section class="exchange-page exchange-form-page" id="sellBoatCommunityForm">
+<div class="exchange-page-head">
+<a href="#communityBoatPage">‹ BACK</a>
+<div class="exchange-page-title">List a Boat — SeaCast Community</div>
+</div>
+<div class="exchange-page-body">
+<label>Boat make / model</label><input placeholder="Boat make / model"/>
+<label>Year</label><input placeholder="Year"/>
+<label>Length</label><input placeholder="Length"/>
+<label>Asking price</label><input placeholder="$"/>
+<label>Your name</label><input placeholder="Name"/>
+<label>Phone or email</label><input placeholder="Contact information"/>
+<label>Description</label><textarea placeholder="Boat description"></textarea>
+<button class="exchange-submit" id="submitCommunityBoat" type="button">SUBMIT BOAT LISTING</button>
+<div aria-live="polite" class="exchange-info" id="communityBoatResult" style="display:none"></div>
+</div>
+</section><section class="exchange-page" id="browseBoatsRegion">
+<div class="exchange-page-head">
+<a href="#regionBoatPage">‹ BACK</a>
+<div class="exchange-page-title">Boats in My Region</div>
+</div>
+<div class="exchange-page-body">
+<div class="exchange-info">Boat listings for the Charlotte Harbor region will appear here as sellers add them.</div>
+</div>
+</section><section class="exchange-page" id="browseBoatsCommunity">
+<div class="exchange-page-head">
+<a href="#communityBoatPage">‹ BACK</a>
+<div class="exchange-page-title">SeaCast Boat Listings</div>
+</div>
+<div class="exchange-page-body">
+<div class="exchange-info">Boat listings from the SeaCast community will appear here.</div>
+</div>
+</section><section class="exchange-page" id="gearPage">
+<div class="exchange-page-head">
+<a href="#">‹ BACK</a>
+<div class="exchange-page-title">Gear &amp; Equipment</div>
+</div>
+<div class="exchange-page-body">
+<div class="weather-zone-banner">THE EXCHANGE — GEAR &amp; EQUIPMENT
+  <small>Choose local or the entire SeaCast community.</small>
+</div>
+<div class="exchange-scope-block">
+<div class="exchange-scope-title">📍 IN MY REGION</div>
+<div class="exchange-scope-sub">Charlotte Harbor region.</div>
+<div class="exchange-pair">
+<a class="sell" href="#sellGearForm">➕ SELL GEAR</a>
+<a class="browse" href="#browseGearRegion">🔎 BROWSE GEAR</a>
+</div>
+</div>
+<div class="exchange-scope-block">
+<div class="exchange-scope-title">🌎 ENTIRE SEACAST COMMUNITY</div>
+<div class="exchange-scope-sub">Use the broader SeaCast network.</div>
+<div class="exchange-pair">
+<a class="sell" href="#sellGearCommunityForm">➕ SELL GEAR</a>
+<a class="browse" href="#browseGearCommunity">🔎 BROWSE GEAR</a>
+</div>
+</div>
+</div>
+</section><section class="exchange-page exchange-form-page" id="sellGearForm">
+<div class="exchange-page-head">
+<a href="#gearPage">‹ BACK</a>
+<div class="exchange-page-title">Sell Gear &amp; Equipment</div>
+</div>
+<div class="exchange-page-body">
+<label>Item name</label><input placeholder="Item name"/>
+<label>Price</label><input placeholder="$"/>
+<label>Category</label>
+<select>
+<option>Marine Electronics</option>
+<option>Fishing Gear</option>
+<option>Safety Equipment</option>
+<option>Boat Parts</option>
+<option>Other Marine Gear</option>
+</select>
+<label>Your name</label><input placeholder="Name"/>
+<label>Phone or email</label><input placeholder="Contact information"/>
+<label>Description</label><textarea placeholder="Item description"></textarea>
+<button class="exchange-submit" id="submitGear" type="button">SUBMIT LISTING</button>
+<div aria-live="polite" class="exchange-info" id="gearResult" style="display:none"></div>
+</div>
+</section><section class="exchange-page" id="browseGearRegion">
+<div class="exchange-page-head">
+<a href="#gearPage">‹ BACK</a>
+<div class="exchange-page-title">Gear in My Region</div>
+</div>
+<div class="exchange-page-body">
+<div class="exchange-info">Regional gear and equipment listings will appear here as SeaCast users add them.</div>
+</div>
+</section><section class="exchange-page" id="jobsPage">
+<div class="exchange-page-head">
+<a href="#">‹ BACK</a>
+<div class="exchange-page-title">Jobs On The Water</div>
+</div>
+<div class="exchange-page-body">
+<div class="weather-zone-banner">📍 CHARLOTTE HARBOR REGION
+      <small>Connect marine employers and people looking for work.</small>
+</div>
+<a class="exchange-native-link primary" href="#jobSeekerForm">👤 I’M LOOKING FOR A JOB
+      <small>Create a simple marine-work profile.</small>
+</a>
+<a class="exchange-native-link" href="#jobPosterForm">💼 I’M POSTING A JOB
+      <small>Marinas and marine businesses can post an opening for the region.</small>
+</a>
+<a class="exchange-native-link" href="#browseJobsRegion">🔎 VIEW JOBS IN MY REGION
+      <small>Browse marine jobs posted throughout the Charlotte Harbor region.</small>
+</a>
+</div>
+</section><section class="exchange-page exchange-form-page" id="jobSeekerForm">
+<div class="exchange-page-head">
+<a href="#jobsPage">‹ BACK</a>
+<div class="exchange-page-title">I’m Looking for a Job</div>
+</div>
+<div class="exchange-page-body">
+<label>Your name</label><input placeholder="Name"/>
+<label>Type of work wanted</label><input placeholder="Mechanic, dockhand, captain, detailer..."/>
+<label>Experience</label><input placeholder="Experience"/>
+<label>Phone or email</label><input placeholder="Contact information"/>
+<label>About you</label><textarea placeholder="Tell employers a little about yourself"></textarea>
+<button class="exchange-submit" id="submitJobSeeker" type="button">SUBMIT PROFILE</button>
+<div aria-live="polite" class="exchange-info" id="jobSeekerResult" style="display:none"></div>
+</div>
+</section><section class="exchange-page exchange-form-page" id="jobPosterForm">
+<div class="exchange-page-head">
+<a href="#jobsPage">‹ BACK</a>
+<div class="exchange-page-title">Post a Job</div>
+</div>
+<div class="exchange-page-body">
+<label>Business / marina name</label><input placeholder="Business or marina"/>
+<label>Job title</label><input placeholder="Job title"/>
+<label>Job type</label>
+<select><option>Full Time</option><option>Part Time</option><option>Seasonal</option><option>Contract</option></select>
+<label>Pay / compensation</label><input placeholder="Optional"/>
+<label>Contact information</label><input placeholder="Phone or email"/>
+<label>Job description</label><textarea placeholder="Job description"></textarea>
+<button class="exchange-submit" id="submitJobPost" type="button">SUBMIT JOB</button>
+<div aria-live="polite" class="exchange-info" id="jobPostResult" style="display:none"></div>
+</div>
+</section><section class="exchange-page" id="browseJobsRegion">
+<div class="exchange-page-head">
+<a href="#jobsPage">‹ BACK</a>
+<div class="exchange-page-title">Jobs in My Region</div>
+</div>
+<div class="exchange-page-body">
+<div class="exchange-info">Marine job postings for the Charlotte Harbor region will appear here.</div>
+</div>
+</section><section class="exchange-page exchange-form-page" id="sellGearCommunityForm">
+<div class="exchange-page-head">
+<a href="#gearPage">‹ BACK</a>
+<div class="exchange-page-title">Sell Gear — SeaCast Community</div>
+</div>
+<div class="exchange-page-body">
+<label>Item name</label><input placeholder="Item name"/>
+<label>Price</label><input placeholder="$"/>
+<label>Category</label>
+<select>
+<option>Marine Electronics</option>
+<option>Fishing Gear</option>
+<option>Safety Equipment</option>
+<option>Boat Parts</option>
+<option>Other Marine Gear</option>
+</select>
+<label>Your name</label><input placeholder="Name"/>
+<label>Phone or email</label><input placeholder="Contact information"/>
+<label>Description</label><textarea placeholder="Item description"></textarea>
+<button class="exchange-submit" id="submitGearCommunity" type="button">SUBMIT LISTING</button>
+<div aria-live="polite" class="exchange-info" id="gearCommunityResult" style="display:none"></div>
+</div>
+</section><section class="exchange-page" id="browseGearCommunity">
+<div class="exchange-page-head">
+<a href="#gearPage">‹ BACK</a>
+<div class="exchange-page-title">Gear — SeaCast Community</div>
+</div>
+<div class="exchange-page-body">
+<div class="exchange-info">Gear and equipment listings from the full SeaCast community will appear here.</div>
+</div>
+</section><section class="exchange-page" id="rentBoatPage">
+<div class="exchange-page-head">
+<a href="#">‹ BACK</a>
+<div class="exchange-page-title">Rent a Boat</div>
+</div>
+<div class="exchange-page-body">
+<div class="weather-zone-banner">
+      RENT A BOAT
+      <small>Keep it simple — choose local or another SeaCast region.</small>
+</div>
+<a class="exchange-native-link primary" href="#rentBoatMyRegion">
+      📍 RENT A BOAT IN MY REGION
+      <small>Charlotte Harbor / Port Charlotte area.</small>
+</a>
+<a class="exchange-native-link" href="#rentBoatOtherRegion">
+      🌎 RENT A BOAT OUT OF MY REGION
+      <small>Choose another SeaCast region.</small>
+</a>
+</div>
+</section><section class="exchange-page" id="rentBoatMyRegion">
+<div class="exchange-page-head">
+<a href="#rentBoatPage">‹ BACK</a>
+<div class="exchange-page-title">Boat Rentals — My Region</div>
+</div>
+<div class="exchange-page-body">
+<div class="weather-zone-banner">
+      📍 CHARLOTTE HARBOR / PORT CHARLOTTE
+      <small>Tap a company to go directly to its website.</small>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Gasparilla Marina</div>
+<small>Placida / Englewood</small>
+</div>
+<a class="rental-site-btn" href="https://gasparillamarina.com/rentals-and-sales/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Lemon Bay Boat Rental at Harbor at Lemon Bay</div>
+<small>Englewood</small>
+</div>
+<a class="rental-site-btn" href="https://lemonbayboatrental.com/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Quality Boats Charlotte Harbor</div>
+<small>Englewood / Charlotte Harbor</small>
+</div>
+<a class="rental-site-btn" href="https://www.qualityboats.com/boat-rentals" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Abe's Boat Rentals</div>
+<small>Cape Haze / Englewood</small>
+</div>
+<a class="rental-site-btn" href="https://www.abesboatrentals.com/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Palm Harbour Marina</div>
+<small>Cape Haze</small>
+</div>
+<a class="rental-site-btn" href="https://www.palm-harbourmarina.com/boat-rentals/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Leisure Time Boat Rentals</div>
+<small>Burnt Store / Charlotte Harbor</small>
+</div>
+<a class="rental-site-btn" href="https://www.leisuretimeboatrentals.com/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Beach Road Watersports</div>
+<small>Englewood</small>
+</div>
+<a class="rental-site-btn" href="https://www.beachroadwatersports.net/boat-rentals/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Florida Coastal Boat Rentals</div>
+<small>Englewood / Manasota Key</small>
+</div>
+<a class="rental-site-btn" href="https://floridacoastalboatrentals.com/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Boat Rental Seekers</div>
+<small>Punta Gorda / Port Charlotte</small>
+</div>
+<a class="rental-site-btn" href="https://www.boatrentalseekers.com/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+<div class="rental-company">
+<div>
+<div class="rental-company-name">Monroe Canal Marina</div>
+<small>Pine Island</small>
+</div>
+<a class="rental-site-btn" href="https://monroecanalmarina.com/" rel="noopener" target="_blank">VISIT WEBSITE ›</a>
+</div>
+</div>
+</section><section class="exchange-page" id="rentBoatOtherRegion">
+<div class="exchange-page-head">
+<a href="#rentBoatPage">‹ BACK</a>
+<div class="exchange-page-title">Rent Outside My Region</div>
+</div>
+<div class="exchange-page-body">
+<div class="weather-zone-banner">
+      CHOOSE ANOTHER SEACAST REGION
+      <small>As additional rental partners are added, this page will take the boater directly to that region's rental companies.</small>
+</div>
+<div class="region-choice">Florida Gulf Coast — Other Regions<small>Explore rental partners outside Charlotte Harbor.</small></div>
+<div class="region-choice">Florida Atlantic Coast<small>Boat rental directory expanding here.</small></div>
+<div class="region-choice">Freshwater Lakes &amp; Rivers<small>Boat rental directory expanding here.</small></div>
+<div class="region-choice">United Kingdom<small>Boat rental directory expanding here.</small></div>
+</div>
+</section><section class="exchange-page otw-menu-page" id="emergencyMenu">
+<div class="exchange-page-head" style="background:#d71920">
+<a href="#">‹ BACK</a>
+<div class="exchange-page-title">Emergency</div>
+</div>
+<div class="exchange-page-body">
+<a class="menu-item" href="#" onclick="openEmergency();return false;">🚨 Emergency Assistance
+      <small>Choose the emergency and activate help options.</small>
+</a>
+<a class="menu-item" href="#" onclick="openBoatersGuide();return false;">🧭 Boater's Guide
+      <small>Quick boating and safety reference.</small>
+</a>
+<a class="menu-item" href="#" onclick="openCommandCenter();return false;">📶 Boating Command Center
+      <small>Your SeaCast boating status and controls.</small>
+</a>
+<a class="menu-item" href="#" onclick="openSeaTow();return false;">🛟 Sea Tow
+      <small>Direct on-water assistance information.</small>
+</a>
+</div>
+</section><section class="exchange-page otw-menu-page" id="weatherMapsMenu">
+<div class="exchange-page-head" style="background:#002b54">
+<a href="#">‹ BACK</a>
+<div class="exchange-page-title">Weather &amp; Maps</div>
+</div>
+<div class="exchange-page-body">
+<a class="menu-item" href="#weatherLive">🌦️ Weather &amp; Radar
+      <small>Live Charlotte Harbor weather, radar and marine forecast.</small>
+</a>
+<a class="menu-item" href="#boatersMapLive">🗺️ Boaters Map
+      <small>Current boaters and activities in your zone.</small>
+</a>
+<a class="menu-item" href="#" onclick="openBoatActivity();return false;">🚤 What Is My Boat Doing?
+      <small>Choose how your boat appears to other SeaCast boaters.</small>
+</a>
+</div>
+</section><section class="exchange-page otw-menu-page" id="marinasFoodMenu">
+<div class="exchange-page-head" style="background:#08aeb9">
+<a href="#">‹ BACK</a>
+<div class="exchange-page-title">Marinas &amp; Food</div>
+</div>
+<div class="exchange-page-body">
+<a class="menu-item" href="#" onclick="openMarinasFuel();return false;">⚓ Marinas &amp; Fuel
+      <small>Marinas and fuel in your current region.</small>
+</a>
+<a class="menu-item" href="#" onclick="openDineDock();return false;">🍴 Dine &amp; Dock
+      <small>Boat-accessible food and dining.</small>
+</a>
+<a class="menu-item" href="#" onclick="openHomeCommunity();return false;">👥 Home Boating Community
+      <small>Your local boating community.</small>
+</a>
+</div>
+</section></div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+<div class="sheet">
+<h2 id="mTitle">Marine Preferred Services</h2>
+<p id="mSub"></p>
+<div class="list" id="mList"></div>
+<button class="close" onclick="closeModal()">CLOSE</button>
+</div>
+</div>
+<script>
+const services=[
+"Marine Mechanics","Outboard & Inboard Engine Service","Marine Electrical Service",
+"Marine Electronics & GPS","Mobile Marine Service","Boat Detailing & Cleaning",
+"Boat Bottom Painting","Canvas & Upholstery","Marine Air Conditioning & Refrigeration",
+"Boat Plumbing & Water Systems"
+];
+const rentals=[
+"Gasparilla Marina","Harbor at Lemon Bay","Quality Boats Charlotte Harbor",
+"Abe's Boat Rentals","Palm Harbour Marina","Leisure Time Boat Rentals",
+"Beach Road Watersports","Florida Coastal Boat Rentals","Boat Rental Seekers",
+"Monroe Canal Marina & Boat Rentals"
+];
+function showModal(title,sub,items,tag){
+ document.getElementById('mTitle').textContent=title;
+ document.getElementById('mSub').textContent=sub||'';
+ document.getElementById('mList').innerHTML=items.map((x,i)=>`<div class="item"><span>${x}</span>${tag?`<span class="coming">${tag}</span>`:''}</div>`).join('');
+ document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function openServices(){
+ document.getElementById('mTitle').textContent='Marine Preferred Services';
+ document.getElementById('mSub').textContent='Only the best. Up to 3 providers per service category. Every provider must maintain a 9.0/10 rating or better to remain a SeaCast 365 Preferred Provider.';
+ document.getElementById('mList').innerHTML=`
+   <button type="button" class="item preferred-link" data-preferred-service="mechanics"><span>🔧 Marine Mechanics</span><span class="coming">OPEN ›</span></button>
+   <button type="button" class="item preferred-link" data-preferred-service="detailing"><span>✨ Detailing &amp; Cleaning</span><span class="coming">OPEN ›</span></button>
+   <button type="button" class="item preferred-link" data-preferred-service="electronics"><span>🖥️ Electronics &amp; GPS</span><span class="coming">OPEN ›</span></button>
+   <button type="button" class="item preferred-link" data-preferred-service="canvas"><span>🪑 Canvas &amp; Upholstery</span><span class="coming">OPEN ›</span></button>
+   <button type="button" class="item preferred-link" data-preferred-service="more"><span>••• More Services</span><span class="coming">OPEN ›</span></button>`;
+ document.getElementById('modal').classList.add('show');
+}
+const preferredProviders={
+ mechanics:{title:'Preferred Marine Mechanics',providers:['3M Boat Mechanic — Mike’s Mobile Mechanic','TIPPET Dockside Service','Gasparilla Marine Service']},
+ detailing:{title:'Preferred Detailing & Cleaning',providers:['Harbor Shine Marine Detailing','Salt & Sun Boat Care','Bluewater Detail Works']},
+ electronics:{title:'Preferred Marine Electronics & GPS',providers:['Coastal Marine Electronics','HarborTech Navigation & Audio','Gulf Signal Marine Systems']},
+ canvas:{title:'Preferred Canvas & Upholstery',providers:['Seabreeze Canvas & Upholstery','Dockside Stitch Marine Interiors','Gulf Coast Canvas Works']},
+ more:{title:'More Preferred Services',providers:['Additional preferred categories coming soon','Maximum 3 providers per category','9.0/10 minimum rating required']}
+};
+function openPreferredService(key){
+ const data=preferredProviders[key]||preferredProviders.more;
+ showModal(data.title,'SeaCast 365 Preferred Providers • Maximum 3 per marina • Must maintain 9.0/10 or better to remain listed.',data.providers,'9.0+ / 10');
+}
+function openMarineMechanics(){openPreferredService('mechanics')}
+function openPreferredCategory(name){
+ const n=String(name||'').toLowerCase();
+ if(n.includes('detail')) return openPreferredService('detailing');
+ if(n.includes('electronic')||n.includes('gps')) return openPreferredService('electronics');
+ if(n.includes('canvas')||n.includes('upholstery')) return openPreferredService('canvas');
+ return openPreferredService('more');
+}
+document.addEventListener('click',function(e){
+ const tile=e.target.closest('[data-preferred-service]');
+ if(!tile) return;
+ e.preventDefault();
+ e.stopPropagation();
+ openPreferredService(tile.getAttribute('data-preferred-service'));
+});
+function openApply(){showModal('Become a Preferred Provider','Placement is limited to a maximum of 3 providers per service category at each marina. Providers must pass SeaCast 365 vetting and maintain a minimum 9.0/10 rating to remain listed.',['Application','Review & Vetting','Approval','Ongoing Rating & Review'],'9.0+ / 10')}
+function openRentals(){showModal('Rent a Boat','Local rental partners',rentals,'COMING SOON')}
+</script>
+<div class="modal" id="emergencyModal"><div class="sheet emergency-sheet">
+<h2 style="color:#b51219">🚨 Emergency Assistance</h2>
+<p><b>Choose what is happening before sending an alert.</b></p>
+<div id="emergencyState"></div>
+<button class="emergency-choice" onclick="sendEmergency('Mechanical / Engine Failure')"><span>🔧 Mechanical / Engine Failure</span><span>›</span></button>
+<button class="emergency-choice" onclick="sendEmergency('Taking on Water')"><span>🌊 Taking on Water</span><span>›</span></button>
+<button class="emergency-choice" onclick="sendEmergency('Medical Emergency')"><span>🩺 Medical Emergency</span><span>›</span></button>
+<button class="emergency-choice" onclick="sendEmergency('Grounded / Stranded')"><span>⚓ Grounded / Stranded</span><span>›</span></button>
+<button class="emergency-choice" onclick="sendEmergency('Collision / Damage')"><span>💥 Collision / Damage</span><span>›</span></button>
+<button class="emergency-choice" onclick="sendEmergency('Fire / Smoke')"><span>🔥 Fire / Smoke</span><span>›</span></button>
+<button class="emergency-choice" onclick="sendEmergency('Person Overboard')"><span>🛟 Person Overboard</span><span>›</span></button>
+<button class="emergency-choice danger" onclick="sendEmergency('Other Urgent Boating Emergency')"><span>🚨 Other Urgent Emergency</span><span>›</span></button>
+<button class="emergency-choice call911" onclick="confirm911()"><span>📞 CALL 911</span><span>›</span></button>
+<button class="close" onclick="closeEmergency()">CANCEL / GO BACK</button>
+</div></div><script>
+function openEmergency(){
+ const m=document.getElementById('emergencyModal');
+ const s=document.getElementById('emergencyState');
+ if(s) s.innerHTML='';
+ if(m) m.classList.add('show');
+}
+function closeEmergency(){
+ const m=document.getElementById('emergencyModal');
+ if(m) m.classList.remove('show');
+}
+function sendEmergency(type){
+ const s=document.getElementById('emergencyState');
+ if(s){
+ s.innerHTML='<div class="alert-live">🚨 Emergency alert selected: '+type+
+ '<br><span style="font-weight:600">Prototype mode: this demonstrates the alert that will be broadcast to nearby SeaCast boaters when live network notifications are connected.</span></div>';
+ }
+}
+function confirm911(){
+ if(confirm('Call 911 now?')){
+ window.location.href='tel:911';
+ }
+}
+document.addEventListener('click',function(e){
+ const m=document.getElementById('emergencyModal');
+ if(e.target===m) closeEmergency();
+});
+</script><script>
+function setVisibility(on){
+ const toggle=document.getElementById('visibilityToggle');
+ const status=document.getElementById('visibilityStatus');
+ if(!toggle||!status) return;
+ toggle.classList.toggle('is-on',!!on);
+ status.classList.toggle('off',!on);
+ if(on){
+   let activity='';
+   try{ activity=localStorage.getItem('seacastActivity')||''; }catch(e){}
+   status.textContent=activity
+     ? '● YES — You are visible as: '+activity+'.'
+     : '● YES — Choose what you are doing before appearing on the map.';
+   if(!activity && typeof openBoatActivity==='function'){
+     setTimeout(openBoatActivity,0);
+   }
+ }else{
+   status.textContent='● NO — You are not visible to other SeaCast boaters.';
+ }
+ try{ localStorage.setItem('seacastVisibility', on ? 'on' : 'off'); }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',function(){
+ let saved='off';
+ try{ saved=localStorage.getItem('seacastVisibility') || 'off'; }catch(e){}
+ setVisibility(saved==='on');
+});
+</script><div class="modal" id="seaTowModal">
+<div class="sheet">
+<div class="seatow-card">
+<img alt="Sea Tow official logo" src="https://upload.wikimedia.org/wikipedia/commons/6/67/Sea_Tow_Logo_-_White.jpg"/>
+<h2 style="margin:4px 0 4px">On-Water Assistance</h2>
+<p style="margin:0 0 10px"><b>24/7 Customer Care &amp; Dispatch</b></p>
+<a class="seatow-call" href="tel:18004732869">📞 CALL SEA TOW — 800-473-2869</a>
+<a class="seatow-link" href="https://seatow.com/" rel="noopener" target="_blank">🌐 OPEN SEA TOW WEBSITE</a>
+<a class="seatow-link" href="https://seatow.com/app/" rel="noopener" target="_blank">📱 SEA TOW APP INFORMATION</a>
+<div class="seatow-small">
+<b>Need on-water assistance?</b><br/>
+ Have your GPS location, boat description, nature of the problem, number of people aboard, and whether you are anchored or adrift ready when you call.<br/><br/>
+<b>VHF:</b> Sea Tow can also be contacted through your local Sea Tow on Channel 16.<br/><br/>
+<b>Life-threatening emergency?</b> Use the red SeaCast Emergency button or call 911 / U.S. Coast Guard first.
+ </div>
+</div>
+<button class="close" onclick="closeSeaTow()">CLOSE / GO BACK</button>
+</div>
+</div><script>
+function openSeaTow(){
+ const m=document.getElementById('seaTowModal');
+ if(m) m.classList.add('show');
+}
+function closeSeaTow(){
+ const m=document.getElementById('seaTowModal');
+ if(m) m.classList.remove('show');
+}
+document.addEventListener('click',function(e){
+ const m=document.getElementById('seaTowModal');
+ if(e.target===m) closeSeaTow();
+});
+</script>
+<div class="modal" id="otwModal" onclick="if(event.target===this)closeOTW()">
+<div class="sheet otw-sheet">
+<h2 id="otwTitle">On The Water</h2>
+<p id="otwSub"></p>
+<div id="otwBody"></div>
+<button class="close" onclick="closeOTW()">CLOSE / GO BACK</button>
+</div>
+</div>
+<script>
+function showOTW(title,sub,body){
+ document.getElementById('otwTitle').textContent=title;
+ document.getElementById('otwSub').textContent=sub||'';
+ document.getElementById('otwBody').innerHTML=body||'';
+ document.getElementById('otwModal').classList.add('show');
+}
+function closeOTW(){document.getElementById('otwModal').classList.remove('show');}
+
+function openWeatherRadar(){
+ showOTW('Weather & Radar','LIVE — Charlotte Harbor Zone',`
+ <div class="live-weather-status" id="liveWeatherStatus">Updating Charlotte Harbor weather…</div>
+ <div class="live-weather-grid">
+ <div class="live-weather-card"><small>Temperature</small><b id="wxTemp">--</b><small id="wxCondition">Loading…</small></div>
+ <div class="live-weather-card"><small>Wind</small><b id="wxWind">--</b><small id="wxWindDir">Charlotte Harbor</small></div>
+ <div class="live-weather-card"><small>Humidity</small><b id="wxHumidity">--</b><small>Current observation</small></div>
+ <div class="live-weather-card"><small>Forecast</small><b id="wxShort">--</b><small id="wxForecast">Loading current forecast…</small></div>
+ </div>
+ <div id="wxAlerts"></div>
+ <button class="otw-action alt" type="button" onclick="loadCharlotteHarborWeather()">↻ REFRESH LIVE WEATHER</button>
+ <a class="otw-action" href="https://radar.weather.gov/" target="_self">🌧 OPEN LIVE NWS RADAR</a>
+ <a class="otw-action" href="https://marine.weather.gov/MapClick.php?zoneid=GMZ836" target="_self">⚓ CHARLOTTE HARBOR MARINE FORECAST</a>
+ <div class="small-note">Weather is tied to the Charlotte Harbor zone. Live conditions are requested from the National Weather Service when this page opens.</div>
+ `);
+ loadCharlotteHarborWeather();
+}
+
+async function loadCharlotteHarborWeather(){
+ const status=document.getElementById('liveWeatherStatus');
+ if(status) status.textContent='Updating Charlotte Harbor weather…';
+
+ try{
+ // Charlotte Harbor / Port Charlotte center point.
+ const lat=26.95, lon=-82.08;
+
+ const pointResp=await fetch(`https://api.weather.gov/points/${lat},${lon}`,{
+ headers:{'Accept':'application/geo+json'}
+ });
+ if(!pointResp.ok) throw new Error('NWS location service unavailable');
+ const point=await pointResp.json();
+
+ const forecastUrl=point.properties.forecastHourly;
+ const stationsUrl=point.properties.observationStations;
+
+ const [forecastResp, stationsResp] = await Promise.all([
+ fetch(forecastUrl,{headers:{'Accept':'application/geo+json'}}),
+ fetch(stationsUrl,{headers:{'Accept':'application/geo+json'}})
+ ]);
+
+ if(!forecastResp.ok) throw new Error('NWS forecast unavailable');
+ const forecast=await forecastResp.json();
+ const period=forecast.properties.periods && forecast.properties.periods[0];
+
+ let obs=null;
+ if(stationsResp.ok){
+ const stations=await stationsResp.json();
+ const station=(stations.features && stations.features[0] && stations.features[0].id);
+ if(station){
+ const obsResp=await fetch(station+'/observations/latest',{
+ headers:{'Accept':'application/geo+json'}
+ });
+ if(obsResp.ok) obs=await obsResp.json();
+ }
+ }
+
+ if(period){
+ document.getElementById('wxTemp').textContent=period.temperature+'°'+period.temperatureUnit;
+ document.getElementById('wxCondition').textContent=period.shortForecast||'Current forecast';
+ document.getElementById('wxWind').textContent=period.windSpeed||'--';
+ document.getElementById('wxWindDir').textContent=(period.windDirection||'')+' wind';
+ document.getElementById('wxShort').textContent=period.name||'Now';
+ document.getElementById('wxForecast').textContent=period.detailedForecast||period.shortForecast||'';
+ }
+
+ if(obs && obs.properties){
+ const rh=obs.properties.relativeHumidity && obs.properties.relativeHumidity.value;
+ if(rh!==null && rh!==undefined){
+ document.getElementById('wxHumidity').textContent=Math.round(rh)+'%';
+ }
+ }
+
+ // Active alerts for Charlotte Harbor coordinate.
+ try{
+ const alertResp=await fetch(`https://api.weather.gov/alerts/active?point=${lat},${lon}`,{
+ headers:{'Accept':'application/geo+json'}
+ });
+ if(alertResp.ok){
+ const alerts=await alertResp.json();
+ const box=document.getElementById('wxAlerts');
+ if(box){
+ if(alerts.features && alerts.features.length){
+ const a=alerts.features[0].properties;
+ box.innerHTML='<div class="live-weather-alert danger">⚠ '+(a.event||'Weather Alert')+
+ '<br><span style="font-weight:650">'+(a.headline||'Active National Weather Service alert for this area.')+'</span></div>';
+ }else{
+ box.innerHTML='<div class="live-weather-alert">✓ No active NWS weather alerts found for the Charlotte Harbor point.</div>';
+ }
+ }
+ }
+ }catch(e){}
+
+ if(status){
+ const now=new Date();
+ status.textContent='LIVE • Charlotte Harbor • Updated '+now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+ }
+
+ // Keep the top weather panel synchronized with the selected Charlotte Harbor zone.
+ if(period){
+ const heroTemp=document.querySelector('.weather .temp');
+ const heroCond=document.querySelector('.weather .small');
+ if(heroTemp) heroTemp.textContent=period.temperature+'°';
+ if(heroCond) heroCond.textContent=period.shortForecast||'Current';
+ }
+ }catch(err){
+ if(status) status.textContent='Live NWS update could not load. Use the Live Radar or Marine Forecast buttons below.';
+ const alerts=document.getElementById('wxAlerts');
+ if(alerts) alerts.innerHTML='<div class="live-weather-alert">Internet access is required for live weather updates.</div>';
+ }
+}
+
+function openBoatersGuide(){
+ showOTW("Boater's Guide",'Quick boating reference',`
+ <div class="otw-card">🔴 Red Channel Markers<small>Keep red markers on the appropriate side based on your direction of travel and local navigation rules.</small></div>
+ <div class="otw-card">🟢 Green Channel Markers<small>Use charted aids to navigation together with local knowledge and official navigation sources.</small></div>
+ <div class="otw-card">🛟 Safety Check<small>Life jackets, throwable device, fire extinguisher, sound-producing device, lights and required documents.</small></div>
+ <div class="small-note">This quick guide is for convenience and does not replace official charts, notices to mariners, or Coast Guard guidance.</div>
+ `);
+}
+
+function directionsUrl(name){
+ const destination=encodeURIComponent(name);
+ const isiPhone=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+ return isiPhone ? ('https://maps.apple.com/?daddr='+destination+'&dirflg=d') : ('https://www.google.com/maps/dir/?api=1&destination='+destination);
+}
+function directionCard(icon,name,subtitle){
+ const url=directionsUrl(name);
+ return `<a class="otw-card direction-card" href="${url}" target="_self" style="display:block;text-decoration:none;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.08)">
+   ${icon} ${name}
+   <small>${subtitle}</small>
+   <span style="display:block;margin-top:8px;font-weight:800;color:#0b5cab">📍 GET DIRECTIONS ›</span>
+ </a>`;
+}
+function openMarinasFuel(){
+ const marinas=[
+ 'Gasparilla Marina, Placida, FL','Palm Harbour Marina, Cape Haze, FL','Eldred’s Marina, Placida, FL','Cape Haze Marina, Cape Haze, FL',
+ 'Boca Grande Marina, Boca Grande, FL','Royal Palm Marina, Englewood, FL','Stump Pass Marina, Englewood, FL','Safe Harbor Pineland, Bokeelia, FL'
+ ];
+ showOTW('Marinas & Fuel','Current zone — Charlotte Harbor / Southwest Florida',
+ marinas.map(x=>directionCard('⚓',x.replace(/, [^,]+, FL$/,''),'Tap to open driving directions.')).join('')
+ + `<div class="small-note">Tap any marina to open directions on your phone.</div>`
+ );
+}
+
+function openDineDock(){
+ const places=[
+ 'Cabbage Key Inn & Restaurant, Pineland, FL','White Elephant Pub, Englewood, FL','Mangoes Restaurant, Boca Grande, FL',
+ 'Tween Waters Island Resort & Spa, Captiva, FL','Pink Shell Beach Resort & Marina, Fort Myers Beach, FL'
+ ];
+ showOTW('Dine & Dock','Boat-accessible dining in the current region',
+ places.map(x=>directionCard('🍴',x.replace(/, [^,]+, FL$/,''),'Tap to open directions.')).join('')
+ + `<div class="small-note">Tap any Dine & Dock location to open directions on your phone.</div>`
+ );
+}
+
+function openBoatersMap(){
+ showOTW('Boaters Map','SeaCast map access',`
+ <div class="otw-card">🌐 SeaCast Boaters Map
+ <small>View boats, marinas, Dock & Dine locations and emergency activity.</small>
+ </div>
+ <div class="otw-card">👁 Visibility Status
+ <small>Your top visibility switch controls whether your boat appears to other SeaCast boaters.</small>
+ </div>
+ <button class="otw-action alt" onclick="alert('Map screen connection is the next functional step. The home-screen visibility setting is already active in this prototype.')">OPEN BOATERS MAP</button>
+ `);
+}
+
+function chooseActivity(name,emoji){
+ try{
+   localStorage.setItem('seacastActivity',name);
+   localStorage.setItem('seacastVisibility','on');
+ }catch(e){}
+ document.querySelectorAll('.activity-choice,.boater-choice').forEach(x=>x.classList.remove('selected'));
+ document.querySelectorAll('[data-activity="'+name+'"],[data-visibility="'+name+'"]').forEach(el=>el.classList.add('selected'));
+ const status=document.getElementById('activityStatus');
+ if(status) status.innerHTML='<b>'+emoji+' '+name+'</b><br><span class="small-note">This is now your selected boating activity.</span>';
+ const topStatus=document.getElementById('visibilityStatus');
+ const toggle=document.getElementById('visibilityToggle');
+ if(toggle) toggle.classList.add('is-on');
+ if(topStatus){
+   topStatus.classList.remove('off');
+   topStatus.textContent='● YES — You are visible as: '+name+'.';
+ }
+ setTimeout(()=>{ if(typeof closeOTW==='function') closeOTW(); },250);
+}
+function openBoatActivity(){
+ let saved='';
+ try{saved=localStorage.getItem('seacastActivity')||'';}catch(e){}
+ const options=[
+ ['Cruising','🚤'],['Sailing','⛵'],['Fishing','🎣'],['Swimming','🏊'],['Diving','🤿']
+ ];
+ showOTW('What Is My Boat Doing?','Choose one activity before making yourself known',
+ `<div id="activityStatus" class="otw-card">${saved?'<b>Current: '+saved+'</b>':'Choose one activity to continue.'}</div>`+
+ options.map(([n,e])=>`<button class="activity-choice ${saved===n?'selected':''}" data-activity="${n}" onclick="chooseActivity('${n}','${e}')"><span>${e} ${n}</span><span>›</span></button>`).join('')
+ );
+}
+
+function openCommandCenter(){
+ let activity='Not selected';
+ let vis='NO';
+ try{
+ activity=localStorage.getItem('seacastActivity')||'Not selected';
+ vis=localStorage.getItem('seacastVisibility')==='on'?'YES':'NO';
+ }catch(e){}
+ showOTW('Boating Command Center','Your SeaCast status at a glance',`
+ <div class="quick-grid">
+ <div class="otw-card">Visibility<small>${vis}</small></div>
+ <div class="otw-card">Activity<small>${activity}</small></div>
+ <div class="otw-card">Zone<small>Charlotte Harbor</small></div>
+ <div class="otw-card">Location<small>Port Charlotte, FL</small></div>
+ </div>
+ <div class="small-note">Live GPS speed, coordinates, trip miles and network boat counts can be connected when the live backend is added.</div>
+ `);
+}
+
+function openHomeCommunity(){
+ showOTW('Home Boating Community','Your local SeaCast community',`
+ <div class="otw-card">🏠 South Gulf Cove<small>Community home area.</small></div>
+ <div class="otw-card">📣 Community Messages<small>Future marina/community alerts and announcements will appear here.</small></div>
+ <button class="otw-action" onclick="alert('Community messaging will connect to the live SeaCast account system.')">OPEN COMMUNITY</button>
+ `);
+}
+</script><script>
+async function loadCharlotteHarborWeatherPage(){
+ const status=document.getElementById('wxPageStatus');
+ if(status) status.textContent='Updating live Charlotte Harbor weather…';
+ try{
+ const lat=26.95, lon=-82.08;
+ const pointResp=await fetch(`https://api.weather.gov/points/${lat},${lon}`);
+ if(!pointResp.ok) throw new Error('point');
+ const point=await pointResp.json();
+
+ const fResp=await fetch(point.properties.forecastHourly);
+ if(!fResp.ok) throw new Error('forecast');
+ const forecast=await fResp.json();
+ const p=forecast.properties.periods && forecast.properties.periods[0];
+
+ if(p){
+ document.getElementById('wxPageTemp').textContent=p.temperature+'°'+p.temperatureUnit;
+ document.getElementById('wxPageCondition').textContent=p.shortForecast||'Current forecast';
+ document.getElementById('wxPageWind').textContent=p.windSpeed||'--';
+ document.getElementById('wxPageWindDir').textContent=(p.windDirection||'')+' wind';
+ document.getElementById('wxPageShort').textContent=p.name||'Now';
+ document.getElementById('wxPageForecast').textContent=p.detailedForecast||p.shortForecast||'';
+ }
+
+ try{
+ const sResp=await fetch(point.properties.observationStations);
+ if(sResp.ok){
+ const stations=await sResp.json();
+ const station=stations.features && stations.features[0] && stations.features[0].id;
+ if(station){
+ const oResp=await fetch(station+'/observations/latest');
+ if(oResp.ok){
+ const obs=await oResp.json();
+ const rh=obs.properties.relativeHumidity && obs.properties.relativeHumidity.value;
+ if(rh!=null) document.getElementById('wxPageHumidity').textContent=Math.round(rh)+'%';
+ }
+ }
+ }
+ }catch(e){}
+
+ try{
+ const aResp=await fetch(`https://api.weather.gov/alerts/active?point=${lat},${lon}`);
+ if(aResp.ok){
+ const alerts=await aResp.json();
+ const box=document.getElementById('wxPageAlerts');
+ if(alerts.features && alerts.features.length){
+ const a=alerts.features[0].properties;
+ box.innerHTML='<div class="live-weather-alert danger">⚠ '+(a.event||'Weather Alert')+
+ '<br><span style="font-weight:650">'+(a.headline||'Active NWS alert for the Charlotte Harbor area.')+'</span></div>';
+ }else{
+ box.innerHTML='<div class="live-weather-alert">✓ No active NWS weather alerts found for the Charlotte Harbor point.</div>';
+ }
+ }
+ }catch(e){}
+
+ if(status){
+ const now=new Date();
+ status.textContent='LIVE • Charlotte Harbor • Updated '+now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+ }
+ }catch(e){
+ if(status) status.textContent='Live data could not load inside this preview. Tap Live NWS Radar or Charlotte Harbor Marine Forecast below.';
+ }
+}
+
+function loadWeatherIfTargeted(){
+ if(location.hash==='#weatherLive') loadCharlotteHarborWeatherPage();
+}
+window.addEventListener('hashchange',loadWeatherIfTargeted);
+document.addEventListener('DOMContentLoaded',loadWeatherIfTargeted);
+</script><script>
+(function(){
+ const root=document.getElementById('boatersMapLive');
+ if(!root) return;
+
+ const showBoats=document.getElementById('showBoats');
+ const showNames=document.getElementById('showNames');
+ const showActivities=document.getElementById('showActivities');
+ const showEmergencies=document.getElementById('showEmergencies');
+
+ function refreshSampleBoaterMap(){
+ root.querySelectorAll('[data-kind="boat"]').forEach(el=>{
+ el.classList.toggle('hidden', !showBoats.checked);
+ });
+ root.querySelectorAll('[data-name]').forEach(el=>{
+ const isEmergency=el.hasAttribute('data-emergency');
+ const text=el.textContent || '';
+ const isActivity=text.includes('•');
+ let hidden=!showNames.checked;
+ if(isActivity && !showActivities.checked) hidden=true;
+ if(isEmergency && !showEmergencies.checked) hidden=true;
+ el.classList.toggle('hidden', hidden);
+ });
+ root.querySelectorAll('[data-kind="emergency"]').forEach(el=>{
+ el.classList.toggle('hidden', !showEmergencies.checked);
+ });
+ }
+
+ [showBoats,showNames,showActivities,showEmergencies].forEach(el=>{
+ el && el.addEventListener('change',refreshSampleBoaterMap);
+ });
+
+ root.querySelectorAll('.boater-choice').forEach(btn=>{
+ btn.addEventListener('click',()=>{
+ root.querySelectorAll('.boater-choice').forEach(x=>x.classList.remove('selected'));
+ btn.classList.add('selected');
+ const note=document.getElementById('boaterVisibilityNote');
+ if(note) note.innerHTML='<b>Selected:</b> '+btn.dataset.visibility+
+ '. This is the activity other boaters will see with your boat.';
+ });
+ });
+
+ refreshSampleBoaterMap();
+})();
+</script>
+<div class="modal" id="exchangeModal" onclick="if(event.target===this)closeExchange()">
+<div class="sheet">
+<h2 id="exchangeTitle">The Exchange</h2>
+<p id="exchangeSub"></p>
+<div id="exchangeBody"></div>
+<button class="close" onclick="closeExchange()">CLOSE / GO BACK</button>
+</div>
+</div>
+<script>
+function showExchange(title,sub,body){
+  document.getElementById('exchangeTitle').textContent=title;
+  document.getElementById('exchangeSub').textContent=sub||'';
+  document.getElementById('exchangeBody').innerHTML=body||'';
+  document.getElementById('exchangeModal').classList.add('show');
+}
+function closeExchange(){
+  document.getElementById('exchangeModal').classList.remove('show');
+}
+
+function openSellBuyBoat(){
+  showExchange('Sell or Buy a Boat','Choose where you want to shop or list your boat.',`
+    <button class="exchange-choice primary" onclick="openBoatListings('region')">
+      📍 IN MY REGION
+      <small>Charlotte Harbor region. Listings appear throughout participating SeaCast marina sites in this region.</small>
+    </button>
+    <button class="exchange-choice" onclick="openBoatListings('community')">
+      🌎 ENTIRE SEACAST COMMUNITY
+      <small>Browse or list across the broader SeaCast community.</small>
+    </button>
+  `);
+}
+function openBoatListings(scope){
+  const scopeName=scope==='region'?'Charlotte Harbor Region':'Entire SeaCast Community';
+  showExchange('Sell or Buy a Boat',scopeName,`
+    <button class="exchange-choice primary" onclick="openBoatSellerForm('${scope}')">
+      💲 SELL A BOAT
+      <small>Create a boat listing for ${scopeName}.</small>
+    </button>
+    <button class="exchange-choice" onclick="showComingListings('Boat listings','${scopeName}')">
+      🛥️ BUY / BROWSE BOATS
+      <small>View boats listed for sale in ${scopeName}.</small>
+    </button>
+    <div class="exchange-info">Regional listings are designed to appear across SeaCast marina sites within that region.</div>
+  `);
+}
+function openBoatSellerForm(scope){
+  const scopeName=scope==='region'?'Charlotte Harbor Region':'Entire SeaCast Community';
+  showExchange('List a Boat for Sale',scopeName,`
+    <div class="exchange-form">
+      <input placeholder="Boat make / model">
+      <input placeholder="Year">
+      <input placeholder="Length">
+      <input placeholder="Asking price">
+      <input placeholder="Your name">
+      <input placeholder="Phone or email">
+      <textarea placeholder="Boat description"></textarea>
+      <button class="otw-action alt" onclick="alert('Boat listing saved for review in this presentation version.')">SUBMIT BOAT LISTING</button>
+    </div>
+    <div class="exchange-info">When the live marketplace is connected, approved regional listings can publish across the participating marina sites in this region.</div>
+  `);
+}
+
+function openGearExchange(){
+  showExchange('Gear & Equipment','Buy and sell boating gear in your region.',`
+    <button class="exchange-choice primary" onclick="openGearForm()">
+      ➕ SELL GEAR OR EQUIPMENT
+      <small>Post an item for the Charlotte Harbor region.</small>
+    </button>
+    <button class="exchange-choice" onclick="showComingListings('Gear & Equipment','Charlotte Harbor Region')">
+      🔎 BROWSE GEAR IN MY REGION
+      <small>See equipment offered by SeaCast users throughout the region.</small>
+    </button>
+    <div class="exchange-info">Regional gear listings are designed to appear across SeaCast marina sites throughout the region.</div>
+  `);
+}
+function openGearForm(){
+  showExchange('Sell Gear & Equipment','Charlotte Harbor Region',`
+    <div class="exchange-form">
+      <input placeholder="Item name">
+      <input placeholder="Price">
+      <select><option>Marine Electronics</option><option>Fishing Gear</option><option>Safety Equipment</option><option>Boat Parts</option><option>Other Marine Gear</option></select>
+      <input placeholder="Your name">
+      <input placeholder="Phone or email">
+      <textarea placeholder="Description"></textarea>
+      <button class="otw-action alt" onclick="alert('Gear listing saved for review in this presentation version.')">SUBMIT LISTING</button>
+    </div>
+  `);
+}
+
+function openJobsOnWater(){
+  showExchange('Jobs On The Water','Connect marine employers and people looking for work.',`
+    <button class="exchange-choice primary" onclick="showJobSeeker()">
+      👤 I’M LOOKING FOR A JOB
+      <small>Create a simple profile showing the kind of marine work you are looking for.</small>
+    </button>
+    <button class="exchange-choice" onclick="showJobPoster()">
+      💼 I’M POSTING A JOB
+      <small>Marinas and marine businesses can post an opening for the region.</small>
+    </button>
+    <button class="exchange-choice" onclick="showComingListings('Jobs On The Water','Charlotte Harbor Region')">
+      🔎 VIEW JOBS IN MY REGION
+      <small>Browse marine jobs posted throughout the Charlotte Harbor region.</small>
+    </button>
+  `);
+}
+function showJobSeeker(){
+  showExchange('Looking for a Job','Jobs On The Water — Charlotte Harbor Region',`
+    <div class="exchange-form">
+      <input placeholder="Your name">
+      <input placeholder="Job or type of work wanted">
+      <input placeholder="Experience">
+      <input placeholder="Phone or email">
+      <textarea placeholder="Tell employers a little about yourself"></textarea>
+      <button class="otw-action alt" onclick="alert('Job seeker profile saved for review in this presentation version.')">SUBMIT PROFILE</button>
+    </div>
+  `);
+}
+function showJobPoster(){
+  showExchange('Post a Job','Jobs On The Water — Charlotte Harbor Region',`
+    <div class="exchange-form">
+      <input placeholder="Business / marina name">
+      <input placeholder="Job title">
+      <select><option>Full Time</option><option>Part Time</option><option>Seasonal</option><option>Contract</option></select>
+      <input placeholder="Pay / compensation (optional)">
+      <input placeholder="Contact information">
+      <textarea placeholder="Job description"></textarea>
+      <button class="otw-action alt" onclick="alert('Job posting saved for review in this presentation version.')">SUBMIT JOB</button>
+    </div>
+    <div class="exchange-info">Regional job postings are designed to be visible throughout participating SeaCast marina sites in the region.</div>
+  `);
+}
+function openEventsPromotions(){
+  showExchange('Events & Promotions','Charlotte Harbor Region',`
+    <div class="exchange-info">Regional boating events, marina promotions and SeaCast partner promotions will appear here.</div>
+    <button class="exchange-choice primary" onclick="alert('Event submission will be connected when the live Exchange backend is added.')">
+      📅 SUBMIT AN EVENT OR PROMOTION
+      <small>For marinas, marine businesses and approved SeaCast partners.</small>
+    </button>
+  `);
+}
+function showComingListings(title,scope){
+  showExchange(title,scope,`
+    <div class="exchange-info">Listings for ${scope} will appear here as the Exchange is populated.</div>
+  `);
+}
+</script><script>
+document.addEventListener('DOMContentLoaded', function(){
+  const actions = [
+    ['submitRegionBoat','regionBoatResult','Boat listing submitted for the Charlotte Harbor region.'],
+    ['submitCommunityBoat','communityBoatResult','Boat listing submitted for the SeaCast community.'],
+    ['submitGear','gearResult','Gear listing submitted for the Charlotte Harbor region.'],
+    ['submitGearCommunity','gearCommunityResult','Gear listing submitted for the SeaCast community.'],
+    ['submitJobSeeker','jobSeekerResult','Job seeker profile submitted for the Charlotte Harbor region.'],
+    ['submitJobPost','jobPostResult','Job posting submitted for the Charlotte Harbor region.']
+  ];
+  actions.forEach(([btnId,resultId,msg])=>{
+    const btn=document.getElementById(btnId);
+    const result=document.getElementById(resultId);
+    if(btn && result){
+      btn.addEventListener('click',()=>{
+        result.textContent=msg;
+        result.style.display='block';
+      });
+    }
+  });
+});
+</script>
+<section class="trip-page" id="tripPlannerPage">
+  <div class="trip-head">
+    <a href="#" aria-label="Back">‹</a>
+    <div class="trip-title"><b>TRIP SCHEDULE</b><small>Plan • Inform • Share</small></div>
+    <span style="width:24px"></span>
+  </div>
+
+  <div class="trip-body">
+    <div class="trip-card">
+      <h3>SET YOUR TRIP SCHEDULE</h3>
+      <label class="trip-field">
+        <span>Trip Name (Optional)</span>
+        <input id="tripNameInput" value="Charlotte Harbor Day Trip">
+      </label>
+
+      <div class="schedule-grid">
+        <div class="schedule-block">
+          <h4>STARTING POINT</h4>
+          <label class="trip-field">
+            <span>Where Are We Starting?</span>
+            <input id="tripStartPoint" value="Gasparilla Marina">
+          </label>
+          <label class="trip-field">
+            <span>Departure Time</span>
+            <input id="tripStartTime" type="time" value="09:00">
+          </label>
+        </div>
+
+        <div class="schedule-block">
+          <h4>ENDING POINT</h4>
+          <label class="trip-field">
+            <span>Where Are We Ending?</span>
+            <input id="tripEndPoint" value="Gasparilla Marina">
+          </label>
+          <label class="trip-field">
+            <span>Expected End Time</span>
+            <input id="tripEndTime" type="time" value="17:00">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="trip-card">
+      <h3>TRIP DETAILS</h3>
+
+      <label class="trip-field">
+        <span>Reason for the Trip</span>
+        <input id="tripReason" placeholder="Fishing charter, sightseeing, island hopping, family day, sunset cruise...">
+      </label>
+
+      <label class="trip-field">
+        <span>Number of Passengers</span>
+        <div class="passenger-picker-wrap">
+          <div id="passengerPicker" class="passenger-picker" aria-label="Number of passengers"></div>
+          <div id="passengerSelected" class="passenger-selected">4 PASSENGERS</div>
+          <input id="passengerCount" type="hidden" value="4">
+        </div>
+      </label>
+    </div>
+
+    <div class="trip-card">
+      <h3>WHERE WE MAY GO</h3>
+      <textarea id="possibleDestinations" class="schedule-textarea large" placeholder="Write anything you want passengers to know about where you may go. Example: We may fish Boca Grande Pass, stop at Cabbage Key for lunch, run toward Useppa Island, or change plans depending on weather and fishing conditions."></textarea>
+      <div class="schedule-note">
+        This is intentionally flexible. It tells passengers the likely plan without promising exact stops or arrival times.
+      </div>
+    </div>
+
+    <div class="trip-card">
+      <h3>WHAT PASSENGERS SHOULD BRING</h3>
+      <textarea id="passengerNote" class="schedule-textarea" placeholder="Sunscreen, sunglasses, hat, light jacket, non-slip shoes, drinks/snacks, medications, fishing license if needed...">Sunscreen, sunglasses, hat, light jacket, non-slip shoes, drinks/snacks, and any personal medications.</textarea>
+    </div>
+
+    <div class="trip-card">
+      <h3>CAPTAIN'S NOTES / TRIP INFORMATION</h3>
+      <textarea id="captainNotes" class="schedule-textarea large" placeholder="Add as much information as you want: pickup instructions, parking, boat name, captain contact, weather notes, food plans, safety reminders, cancellation information, special instructions, or anything else passengers should know."></textarea>
+      <div class="schedule-note">
+        The captain can write as much or as little as needed. This information will be included when the trip schedule is shared.
+      </div>
+    </div>
+
+    <div class="trip-card">
+      <button class="trip-action outline" type="button" onclick="saveTripPlan()">SAVE FOR LATER</button>
+      <button class="trip-action blue" type="button" onclick="shareTripPlan()">SHARE TRIP SCHEDULE</button>
+      <div id="tripPlannerMessage" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e7f7eb;color:#145d2b;font-size:12px;font-weight:800"></div>
+    </div>
+  </div>
+</section>
+
+<div class="dest-picker" id="destinationPicker" aria-hidden="true" onclick="if(event.target===this)closeDestinationPicker()">
+  <div class="dest-sheet">
+    <div class="dest-sheet-head">
+      <div><b>CHOOSE A DESTINATION</b><div style="font-size:10px;opacity:.88;margin-top:2px">Current Zone • Charlotte Harbor</div></div>
+      <button class="dest-close" type="button" onclick="closeDestinationPicker()">×</button>
+    </div>
+    <div class="dest-sheet-body">
+      <div class="dest-section-title">ALL DESTINATIONS IN MY ZONE <span id="zoneDestinationCount" style="float:right;color:#159447">DESTINATIONS</span></div>
+      <input id="marinaSearch" type="search" placeholder="Search marinas or Dine & Dock..." oninput="renderDestinationChoices()" style="width:100%;border:1px solid #cad8e3;border-radius:10px;padding:10px 12px;margin:0 0 8px;font:inherit;background:#fff;color:#071d34">
+      <button class="trip-action green" type="button" onclick="addSecretFishingSpot()" style="margin:0 0 8px">🎣 ADD SECRET FISHING SPOT / FISHING HOLE</button>
+      <button class="trip-action outline" type="button" onclick="toggleCustomMarinaForm()" style="margin:0 0 8px">＋ ADD A DESTINATION NOT LISTED</button>
+      <div id="customMarinaForm" style="display:none;background:#eef5f9;border:1px solid #d7e2e9;border-radius:10px;padding:10px;margin-bottom:10px">
+        <label class="trip-field"><span>Destination Name</span><input id="customMarinaName" placeholder="Enter destination name"></label>
+        <label class="trip-field"><span>City / Area</span><input id="customMarinaArea" placeholder="Enter city or area"></label>
+        <button class="trip-action green" type="button" onclick="addCustomMarina()">ADD DESTINATION TO THIS TRIP</button>
+      </div>
+      <div id="zoneMarinaChoices"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const seaCastZoneMarinas = [
+  ['Gasparilla Marina','Placida, FL'],
+  ['Palm Harbour Marina','Cape Haze, FL'],
+  ['Eldred’s Marina','Placida, FL'],
+  ['Charlotte Harbor Boat Storage','Placida / Port Charlotte, FL'],
+  ['Cape Haze Marina','Cape Haze, FL'],
+  ['Boca Grande Marina','Boca Grande, FL'],
+  ['The Gasparilla Inn Marina','Boca Grande, FL'],
+  ['Uncle Henry’s Marina','Boca Grande, FL'],
+  ['Royal Palm Marina','Englewood, FL'],
+  ['Chadwick Cove Marina','Englewood Beach, FL'],
+  ['Stump Pass Marina','Englewood, FL'],
+  ['Four Winds Marina','Pine Island, FL'],
+  ['Safe Harbor Pineland','Pineland, FL'],
+  ['Jug Creek Marina & Fish House','Bokeelia, FL'],
+  ['Bocilla Island Seaport','Bokeelia, FL'],
+  ['Monroe Canal Marina','St. James City, FL'],
+  ['Pine Island Commercial Marina','St. James City, FL'],
+  ['North Captiva Island Club Marina','North Captiva, FL'],
+  ['South Seas Marina','Captiva, FL'],
+  ['’Tween Waters Marina','Captiva, FL'],
+  ['Pink Shell Marina','Fort Myers Beach, FL'],
+  ['Moss Marina','Fort Myers Beach, FL'],
+  ['Gulf Star Marina','Fort Myers Beach, FL'],
+  ['Salty Sam’s Marina','Fort Myers Beach, FL'],
+  ['Snook Bight Marina','Fort Myers Beach, FL'],
+  ['Fish-Tale Marina','Fort Myers Beach, FL'],
+  ['Whidden’s Marina','Boca Grande, FL'],
+  ['Jensen’s Twin Palm Resort & Marina','Captiva, FL'],
+  ['McCarthy’s Marina','Captiva, FL'],
+  ['Sanibel Marina','Sanibel, FL'],
+  ['Castaways Marina at Blind Pass','Sanibel / Captiva, FL'],
+  ['Cabbage Key Marina','Cabbage Key, FL'],
+  ['Useppa Island Club Marina','Useppa Island, FL'],
+  ['Port Sanibel Marina','Fort Myers, FL'],
+  ['Getaway Marina','Fort Myers Beach, FL'],
+  ['Excursions Marina','Fort Myers Beach, FL']
+];
+
+const seaCastZoneDineDock = [
+  ['Cabbage Key Inn & Restaurant','Cabbage Key'],
+  ['White Elephant Pub','Englewood Beach'],
+  ['Mangoes Restaurant','Boca Grande'],
+  ["'Tween Waters Island Resort & Spa",'Captiva'],
+  ['Pink Shell Beach Resort & Marina','Fort Myers Beach']
+];
+
+let seaCastTripStops = [
+  {name:'Gasparilla Marina', area:'Placida, FL', kind:'Home Marina', departTime:'09:00'}
+];
+
+let seaCastFilteredDestinations=[];
+
+function renderDestinationChoices(){
+  const box=document.getElementById('zoneMarinaChoices');
+  const search=(document.getElementById('marinaSearch')?.value||'').trim().toLowerCase();
+
+  const combined = [
+    ...seaCastZoneMarinas.map(x => ({name:x[0], area:x[1], kind:'Marina', icon:'⚓'})),
+    ...seaCastZoneDineDock.map(x => ({name:x[0], area:x[1], kind:'Dine & Dock', icon:'🍴'}))
+  ].sort((a,b)=>a.name.localeCompare(b.name));
+
+  seaCastFilteredDestinations = combined.filter(x =>
+    (x.name+' '+x.area+' '+x.kind).toLowerCase().includes(search)
+  );
+
+  const count=document.getElementById('zoneDestinationCount');
+  if(count) count.textContent = search ? `${seaCastFilteredDestinations.length} MATCHES` : `${combined.length} DESTINATIONS`;
+
+  if(box){
+    box.innerHTML = seaCastFilteredDestinations.length
+      ? seaCastFilteredDestinations.map((x,i) =>
+          `<button class="dest-option" type="button" onclick="addDestinationChoice(${i})">
+             <b>${x.icon} ${escapeTripHtml(x.name)}</b>
+             <small>${escapeTripHtml(x.area)} • ${escapeTripHtml(x.kind)}</small>
+           </button>`
+        ).join('')
+      : '<div style="padding:12px;color:#607284;font-size:12px">No destinations match that search.</div>';
+  }
+}
+
+function escapeTripHtml(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function addDestinationChoice(index){
+  const x=seaCastFilteredDestinations[index];
+  if(!x) return;
+  addTripStop(x.name,x.area,x.kind);
+}
+
+function renderTripStops(){
+  const box=document.getElementById('tripDestinations');
+  if(!box) return;
+
+  const rows=[];
+
+  // Start card
+  const home=seaCastTripStops[0] || {name:'Gasparilla Marina',area:'Placida, FL',kind:'Home Marina',departTime:'09:00'};
+  rows.push(`
+    <div class="destination-row" style="display:block;border:2px solid #159447">
+      <div style="display:flex;align-items:center;gap:9px">
+        <span class="num" style="background:#159447">S</span>
+        <div class="dest-main">
+          <b>START — ${home.name}</b>
+          <small>${home.area} • Home Marina</small>
+        </div>
+      </div>
+      <div style="margin-top:9px">
+        <label style="display:block;font-size:9px;font-weight:900;color:#607284;text-transform:uppercase">
+          Departure From Home Marina
+          <input type="time"
+            value="${home.departTime||document.getElementById('tripDeparture')?.value||'09:00'}"
+            onchange="updateDepartureTime(0,this.value)"
+            style="width:100%;margin-top:4px;border:1px solid #cad8e3;border-radius:8px;padding:9px;font:inherit">
+        </label>
+      </div>
+    </div>
+  `);
+
+  // Legs
+  for(let i=1;i<seaCastTripStops.length;i++){
+    const from=seaCastTripStops[i-1];
+    const to=seaCastTripStops[i];
+    const isFinal=i===seaCastTripStops.length-1;
+    rows.push(`
+      <div class="destination-row" style="display:block">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span class="num">${i}</span>
+          <div class="dest-main">
+            <b>${isFinal?'FINAL LEG':'LEG '+i} — ${from.name} → ${to.name}</b>
+            <small>${from.area} → ${to.area}</small>
+          </div>
+          <button type="button" onclick="removeTripStop(${i})">×</button>
+        </div>
+        <div style="margin-top:9px">
+          <label style="display:block;font-size:9px;font-weight:900;color:#607284;text-transform:uppercase">
+            Departure From ${from.name}
+            <input type="time"
+              value="${from.departTime||''}"
+              onchange="updateDepartureTime(${i-1},this.value)"
+              style="width:100%;margin-top:4px;border:1px solid #cad8e3;border-radius:8px;padding:9px;font:inherit">
+          </label>
+        </div>
+      </div>
+    `);
+  }
+
+  // End card appears only if there is at least one destination.
+  if(seaCastTripStops.length>1){
+    const end=seaCastTripStops[seaCastTripStops.length-1];
+    rows.push(`
+      <div class="destination-row" style="display:block;border:2px solid #002b54">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span class="num" style="background:#002b54">E</span>
+          <div class="dest-main">
+            <b>END — ${end.name}</b>
+            <small>${end.area}</small>
+          </div>
+        </div>
+      </div>
+    `);
+  }
+
+  box.innerHTML=rows.join('');
+
+  const count=document.getElementById('tripStopCount');
+  if(count) count.textContent=Math.max(0,seaCastTripStops.length-1);
+
+  const el=document.getElementById('tripTimeEstimate');
+  if(el) el.textContent=seaCastTripStops.length>1 ? `${seaCastTripStops.length-1} LEGS` : '—';
+
+  renderDepartureSummary();
+}
+
+function openDestinationPicker(){
+  renderDestinationChoices();
+  const p=document.getElementById('destinationPicker');
+  p.classList.add('show'); p.setAttribute('aria-hidden','false');
+}
+function closeDestinationPicker(){
+  const p=document.getElementById('destinationPicker');
+  p.classList.remove('show'); p.setAttribute('aria-hidden','true');
+}
+function addTripStop(name,area,kind){
+  seaCastTripStops.push({name,area,kind,departTime:''});
+  renderTripStops();
+  closeDestinationPicker();
+}
+function removeTripStop(i){
+  seaCastTripStops.splice(i,1);
+  renderTripStops();
+  calculateTrip();
+}
+
+let tripTimingMode='auto';
+
+function setTripTimingMode(mode){
+  tripTimingMode=mode;
+  const auto=document.getElementById('autoModeBtn');
+  const manual=document.getElementById('manualModeBtn');
+  const help=document.getElementById('tripTimingHelp');
+  if(auto) auto.classList.toggle('active',mode==='auto');
+  if(manual) manual.classList.toggle('active',mode==='manual');
+  if(help) help.textContent = mode==='manual'
+    ? 'Manual Plan lets you enter your own travel time and time at each stop. SeaCast totals the day using your numbers.'
+    : 'Auto Estimate uses average cruising speed to estimate underway time.';
+  renderTripStops();
+  calculateTrip();
+}
+
+function updateStopTiming(index,key,value){
+  if(!seaCastTripStops[index]) return;
+  if(key==='departTime') seaCastTripStops[index][key]=value;
+  else seaCastTripStops[index][key]=Math.max(0,Number(value)||0);
+  calculateManualTrip();
+}
+
+function timeToMinutes(t){
+  const parts=(t||'09:00').split(':').map(Number);
+  return (parts[0]||0)*60+(parts[1]||0);
+}
+function minutesToTime(mins){
+  mins=((mins%1440)+1440)%1440;
+  let h=Math.floor(mins/60), m=mins%60;
+  const suffix=h>=12?'PM':'AM';
+  const hh=h%12||12;
+  return `${hh}:${String(m).padStart(2,'0')} ${suffix}`;
+}
+
+function calculateManualTrip(){
+  const legs=Math.max(0,seaCastTripStops.length-1);
+  if(!legs){
+    const el=document.getElementById('tripTimeEstimate');
+    if(el) el.textContent='—';
+    return;
+  }
+  const start=seaCastTripStops[0]?.departTime || document.getElementById('tripDeparture')?.value || '09:00';
+  let cursor=timeToMinutes(start);
+  let underway=0, stopTime=0;
+
+  for(let i=1;i<seaCastTripStops.length;i++){
+    const travel=Math.max(0,Number(seaCastTripStops[i].travelMins)||0);
+    const stay=Math.max(0,Number(seaCastTripStops[i].stayMins)||0);
+    underway+=travel;
+    stopTime+=stay;
+    cursor+=travel+stay;
+  }
+  const total=underway+stopTime;
+  const h=Math.floor(total/60), m=total%60;
+  const el=document.getElementById('tripTimeEstimate');
+  if(el) el.textContent=(h?h+'h ':'')+m+'m';
+
+  const msg=document.getElementById('tripPlannerMessage');
+  if(msg){
+    msg.style.display='block';
+    msg.textContent=`Manual trip plan: ${underway} min underway + ${stopTime} min at stops = ${(h?h+'h ':'')+m+'m'} total. Expected finish: ${minutesToTime(cursor)}.`;
+  }
+}
+
+
+function updateDepartureTime(index,value){
+  if(!seaCastTripStops[index]) return;
+  seaCastTripStops[index].departTime=value;
+  if(index===0){
+    const top=document.getElementById('tripDeparture');
+    if(top) top.value=value;
+  }
+  renderDepartureSummary();
+}
+
+function renderDepartureSummary(){
+  const el=document.getElementById('tripTimeEstimate');
+  if(el) el.textContent='SCHEDULED';
+
+  const msg=document.getElementById('tripPlannerMessage');
+  if(!msg) return;
+
+  const scheduled=seaCastTripStops.filter(x=>x.departTime).length;
+  if(scheduled){
+    msg.style.display='block';
+    msg.textContent=`Departure schedule ready: ${scheduled} of ${seaCastTripStops.length} stops have departure times.`;
+  }else{
+    msg.style.display='none';
+  }
+}
+
+function calculateTrip(){
+  const msg=document.getElementById('tripPlannerMessage');
+  const missing=seaCastTripStops.filter(x=>!x.departTime);
+  if(msg){
+    msg.style.display='block';
+    msg.textContent = missing.length
+      ? `Itinerary built. Add departure times to ${missing.length} stop${missing.length===1?'':'s'} when you are ready.`
+      : 'Leg-by-leg itinerary built and ready to share.';
+  }
+  renderDepartureSummary();
+}
+function saveTripPlan(){
+  const data={
+    tripName:(document.getElementById('tripNameInput')?.value||'').trim(),
+    startPoint:(document.getElementById('tripStartPoint')?.value||'').trim(),
+    startTime:document.getElementById('tripStartTime')?.value||'',
+    endPoint:(document.getElementById('tripEndPoint')?.value||'').trim(),
+    endTime:document.getElementById('tripEndTime')?.value||'',
+    reason:(document.getElementById('tripReason')?.value||'').trim(),
+    passengers:document.getElementById('passengerCount')?.value||'4',
+    possible:(document.getElementById('possibleDestinations')?.value||'').trim(),
+    bring:(document.getElementById('passengerNote')?.value||'').trim(),
+    notes:(document.getElementById('captainNotes')?.value||'').trim()
+  };
+  try{ localStorage.setItem('seacastTripSchedule',JSON.stringify(data)); }catch(e){}
+  const msg=document.getElementById('tripPlannerMessage');
+  if(msg){
+    msg.style.display='block';
+    msg.textContent='Trip schedule saved on this device.';
+  }
+}
+
+function loadSavedTripPlan(){
+  let data=null;
+  try{ data=JSON.parse(localStorage.getItem('seacastTripSchedule')||'null'); }catch(e){}
+  if(!data) return;
+  const values={
+    tripNameInput:data.tripName, tripStartPoint:data.startPoint, tripStartTime:data.startTime,
+    tripEndPoint:data.endPoint, tripEndTime:data.endTime, tripReason:data.reason,
+    passengerCount:data.passengers, possibleDestinations:data.possible,
+    passengerNote:data.bring, captainNotes:data.notes
+  };
+  Object.entries(values).forEach(([id,val])=>{
+    const el=document.getElementById(id);
+    if(el && val!==undefined && val!==null && val!=='') el.value=val;
+  });
+  const label=document.getElementById('passengerSelected');
+  if(label && data.passengers){
+    const n=Number(data.passengers)||1;
+    label.textContent=`${n} ${n===1?'PASSENGER':'PASSENGERS'}`;
+  }
+}
+
+
+function addSecretFishingSpot(){
+  const nickname = (prompt('Name this fishing spot (optional):','Secret Fishing Spot') || '').trim() || 'Secret Fishing Spot';
+  const area = (prompt('Area or description (optional):','Private fishing location') || '').trim() || 'Private fishing location';
+  addTripStop(nickname, area, 'Private Fishing Spot');
+}
+
+function toggleCustomMarinaForm(){
+  const form=document.getElementById('customMarinaForm');
+  if(!form) return;
+  form.style.display=form.style.display==='none' ? 'block' : 'none';
+}
+function addCustomMarina(){
+  const name=(document.getElementById('customMarinaName')?.value||'').trim();
+  const area=(document.getElementById('customMarinaArea')?.value||'').trim();
+  if(!name){
+    alert('Enter a destination name first.');
+    return;
+  }
+  addTripStop(name, area || 'Current Zone', 'Destination');
+  const n=document.getElementById('customMarinaName');
+  const a=document.getElementById('customMarinaArea');
+  if(n) n.value='';
+  if(a) a.value='';
+  const form=document.getElementById('customMarinaForm');
+  if(form) form.style.display='none';
+}
+
+
+function initPassengerPicker(){
+  const picker=document.getElementById('passengerPicker');
+  const hidden=document.getElementById('passengerCount');
+  const label=document.getElementById('passengerSelected');
+  if(!picker || !hidden || !label) return;
+
+  const maxPassengers=20;
+  picker.innerHTML='';
+  for(let i=1;i<=maxPassengers;i++){
+    const option=document.createElement('div');
+    option.className='passenger-option';
+    option.dataset.value=String(i);
+    option.textContent=String(i);
+    picker.appendChild(option);
+  }
+
+  function selectPassenger(value,scroll=false){
+    value=Math.min(maxPassengers,Math.max(1,Number(value)||1));
+    hidden.value=String(value);
+    label.textContent=`${value} ${value===1?'PASSENGER':'PASSENGERS'}`;
+    picker.querySelectorAll('.passenger-option').forEach(el=>{
+      el.classList.toggle('selected',Number(el.dataset.value)===value);
+    });
+    if(scroll){
+      const el=picker.querySelector(`[data-value="${value}"]`);
+      if(el) el.scrollIntoView({block:'center'});
+    }
+  }
+
+  let timer=null;
+  picker.addEventListener('scroll',()=>{
+    clearTimeout(timer);
+    timer=setTimeout(()=>{
+      const pickerRect=picker.getBoundingClientRect();
+      const center=pickerRect.top+pickerRect.height/2;
+      let best=null, bestDist=Infinity;
+      picker.querySelectorAll('.passenger-option').forEach(el=>{
+        const r=el.getBoundingClientRect();
+        const c=r.top+r.height/2;
+        const d=Math.abs(c-center);
+        if(d<bestDist){best=el;bestDist=d;}
+      });
+      if(best) selectPassenger(best.dataset.value,false);
+    },70);
+  });
+
+  picker.addEventListener('click',e=>{
+    const option=e.target.closest('.passenger-option');
+    if(option) selectPassenger(option.dataset.value,true);
+  });
+
+  selectPassenger(hidden.value||4,true);
+}
+
+document.addEventListener('DOMContentLoaded',renderTripStops);
+document.addEventListener('DOMContentLoaded',initPassengerPicker);
+document.addEventListener('DOMContentLoaded',loadSavedTripPlan);
+</script>
+
+
+<script>
+function formatTime12(value){
+  if(!value) return '';
+  const parts=String(value).split(':');
+  let h=Number(parts[0]), m=Number(parts[1]||0);
+  if(!Number.isFinite(h)) return value;
+  const suffix=h>=12?'PM':'AM';
+  h=h%12||12;
+  return `${h}:${String(m).padStart(2,'0')} ${suffix}`;
+}
+
+function buildTripShareText(){
+  const tripName=(document.getElementById('tripNameInput')?.value||'SeaCast 365 Trip Schedule').trim();
+  const startPoint=(document.getElementById('tripStartPoint')?.value||'').trim();
+  const startTime=document.getElementById('tripStartTime')?.value||'';
+  const endPoint=(document.getElementById('tripEndPoint')?.value||'').trim();
+  const endTime=document.getElementById('tripEndTime')?.value||'';
+  const reason=(document.getElementById('tripReason')?.value||'').trim();
+  const passengers=document.getElementById('passengerCount')?.value||'';
+  const possible=(document.getElementById('possibleDestinations')?.value||'').trim();
+  const bring=(document.getElementById('passengerNote')?.value||'').trim();
+  const notes=(document.getElementById('captainNotes')?.value||'').trim();
+
+  const lines=[
+    'SeaCast 365 — Trip Schedule',
+    tripName,
+    '',
+    `START: ${startPoint || 'TBD'}${startTime ? ` — ${formatTime12(startTime)}` : ''}`,
+    `END: ${endPoint || 'TBD'}${endTime ? ` — ${formatTime12(endTime)}` : ''}`,
+    passengers ? `Passengers: ${passengers}` : ''
+  ].filter(Boolean);
+
+  if(reason){
+    lines.push('');
+    lines.push('Reason for Trip:');
+    lines.push(reason);
+  }
+
+  if(possible){
+    lines.push('');
+    lines.push('Where We May Go:');
+    lines.push(possible);
+  }
+
+  if(bring){
+    lines.push('');
+    lines.push('What Passengers Should Bring:');
+    lines.push(bring);
+  }
+
+  if(notes){
+    lines.push('');
+    lines.push("Captain's Notes / Trip Information:");
+    lines.push(notes);
+  }
+
+  lines.push('');
+  lines.push('Trip plans and destinations may change based on weather, water conditions, safety, timing, and the captain’s judgment.');
+  return lines.join('\n');
+}
+
+async function shareTripPlan(){
+  const shareText=buildTripShareText();
+  const title=(document.getElementById('tripNameInput')?.value||'SeaCast 365 Trip').trim();
+  const msg=document.getElementById('tripPlannerMessage');
+
+  if(navigator.share){
+    try{
+      await navigator.share({title, text:shareText});
+      if(msg){
+        msg.style.display='block';
+        msg.textContent='Trip schedule shared successfully.';
+      }
+      return;
+    }catch(err){
+      if(err && err.name==='AbortError') return;
+    }
+  }
+
+  try{
+    await navigator.clipboard.writeText(shareText);
+    if(msg){
+      msg.style.display='block';
+      msg.textContent='Share sheet was unavailable, so the itinerary was copied. Paste it into a text, email, WhatsApp, Messenger, or another app.';
+    }
+  }catch(e){
+    if(msg){
+      msg.style.display='block';
+      msg.style.whiteSpace='pre-wrap';
+      msg.textContent=shareText;
+    }
+  }
+}
+</script>
+
+
+<style id="seacast-preferred-services-fix">
+#sc365PreferredModal{
+  position:fixed; inset:0; z-index:999999; display:none;
+  background:rgba(0,0,0,.58); align-items:flex-end; justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
+}
+#sc365PreferredModal .sheet{
+  width:min(680px,100%); max-height:88vh; overflow:auto;
+  background:#fff; border-radius:22px 22px 0 0; padding:20px;
+  box-shadow:0 -10px 40px rgba(0,0,0,.35);
+}
+#sc365PreferredModal .head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#sc365PreferredModal h2{margin:0;font-size:25px;line-height:1.1;color:#06386b}
+#sc365PreferredModal .sub{margin:8px 0 16px;color:#444;font-weight:700}
+#sc365PreferredModal .provider{
+  display:block; width:100%; text-align:left; box-sizing:border-box;
+  border:1px solid #d8e0e8; border-radius:16px; background:#f8fafc;
+  padding:16px; margin:10px 0; font-size:18px; font-weight:800; color:#0a3157;
+}
+#sc365PreferredModal .rating{
+  display:inline-block; margin-top:6px; padding:5px 9px; border-radius:999px;
+  background:#eef6ff; font-size:13px; font-weight:800; color:#0a3157;
+}
+#sc365PreferredModal .close{
+  border:0; background:#eee; border-radius:999px; width:40px;height:40px;
+  font-size:22px; font-weight:900;
+}
+
+/* RC3: functional bottom navigation */
+.bottom .nav{
+ display:block;
+ color:#fff;
+ text-decoration:none;
+ cursor:pointer;
+ padding:2px 2px 0;
+ border-radius:10px;
+ -webkit-tap-highlight-color:rgba(255,255,255,.18);
+ touch-action:manipulation;
+}
+.bottom .nav:active{background:rgba(255,255,255,.12)}
+.nav-page-card{background:#fff;border:1px solid #d7e1e8;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.nav-page-card h3{margin:0 0 9px;color:#002b54;font-size:16px}
+.nav-field{display:block;margin:10px 0}
+.nav-field span{display:block;font-size:11px;font-weight:900;color:#526273;margin-bottom:5px}
+.nav-field input,.nav-field select,.nav-field textarea{width:100%;border:1px solid #cbd7e0;border-radius:9px;padding:11px;font:inherit;background:#fff;color:#071d34}
+.nav-field textarea{min-height:92px;resize:vertical}
+.nav-primary,.nav-secondary{width:100%;border:0;border-radius:10px;padding:12px;font-weight:900;font-size:13px;cursor:pointer;margin-top:8px}
+.nav-primary{background:#002b54;color:#fff}
+.nav-secondary{background:#e8f4f6;color:#073b57;border:1px solid #b9d9df}
+.nav-success{display:none;margin-top:10px;border-radius:9px;padding:10px;background:#e7f7eb;color:#145d2b;font-size:12px;font-weight:800}
+.nav-message{border:1px solid #d7e1e8;border-radius:11px;padding:12px;margin:9px 0;background:#fff}
+.nav-message b{display:block;color:#002b54;margin-bottom:4px}
+.nav-message small{color:#6c7a87}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #e4ebf0}
+.settings-row:last-child{border-bottom:0}
+.settings-copy b{display:block;color:#071d34}.settings-copy small{display:block;color:#607284;margin-top:3px;line-height:1.3}
+.settings-toggle{border:0;border-radius:20px;padding:9px 13px;font-weight:900;cursor:pointer;min-width:72px}
+.settings-toggle.on{background:#18a84a;color:#fff}.settings-toggle.off{background:#d71920;color:#fff}
+.account-danger-card{border:2px solid #f0b9bc;background:#fffafa}
+.account-danger-card h3{color:#a80f16;margin-bottom:7px}
+.account-danger-copy{font-size:13px;line-height:1.45;color:#5c2a2d;margin-bottom:12px}
+.account-delete-button{width:100%;border:0;border-radius:12px;background:#c91820;color:#fff;font-weight:950;padding:13px 14px;cursor:pointer;letter-spacing:.2px}
+.account-delete-success{margin-top:10px;color:#15733a}
+.account-delete-modal{position:fixed;inset:0;background:rgba(4,17,31,.72);z-index:9999;display:none;align-items:center;justify-content:center;padding:22px}
+.account-delete-modal.open{display:flex}
+.account-delete-dialog{width:min(430px,100%);background:#fff;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.34);text-align:center}
+.account-delete-icon{font-size:34px;margin-bottom:4px}
+.account-delete-dialog h2{margin:6px 0 10px;color:#9f1118;font-size:22px}
+.account-delete-dialog p{margin:0 0 10px;color:#35495a;line-height:1.45;font-size:14px}
+.account-delete-dialog .account-delete-legal{font-size:12px;color:#697b89}
+.account-delete-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}
+.account-cancel-button,.account-confirm-delete-button{border:0;border-radius:11px;padding:12px 10px;font-weight:950;cursor:pointer}
+.account-cancel-button{background:#e8edf1;color:#16324b}
+.account-confirm-delete-button{background:#c91820;color:#fff}
+@media(max-width:380px){.account-delete-actions{grid-template-columns:1fr}}
+</style>
+
+<div id="sc365PreferredModal" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sc365PreferredTitle">
+    <div class="head">
+      <h2 id="sc365PreferredTitle">Preferred Services</h2>
+      <button class="close" type="button" aria-label="Close" onclick="sc365ClosePreferred()">×</button>
+    </div>
+    <div class="sub" id="sc365PreferredSubtitle"></div>
+    <div id="sc365PreferredProviders"></div>
+  </div>
+</div>
+
+<script id="seacast-preferred-services-js-fix">
+(function(){
+  const DATA = {
+    mechanics: {
+      title: 'Preferred Marine Mechanics',
+      providers: [
+        '3M Boat Mechanic — Mike’s Mobile Mechanic',
+        'TIPPET Dockside Service',
+        'Gasparilla Marine Service'
+      ]
+    },
+    detailing: {
+      title: 'Preferred Detailing & Cleaning',
+      providers: [
+        'Harbor Shine Marine Detailing',
+        'Salt & Sun Boat Care',
+        'Bluewater Detail Works'
+      ]
+    },
+    electronics: {
+      title: 'Preferred Electronics & GPS',
+      providers: [
+        'Coastal Marine Electronics',
+        'HarborTech Navigation & Audio',
+        'Gulf Signal Marine Systems'
+      ]
+    },
+    canvas: {
+      title: 'Preferred Canvas & Upholstery',
+      providers: [
+        'Seabreeze Canvas & Upholstery',
+        'Dockside Stitch Marine Interiors',
+        'Gulf Coast Canvas Works'
+      ]
+    }
+  };
+
+  window.sc365OpenPreferred = function(key){
+    const d = DATA[key];
+    if(!d) return;
+    const modal = document.getElementById('sc365PreferredModal');
+    document.getElementById('sc365PreferredTitle').textContent = d.title;
+    document.getElementById('sc365PreferredSubtitle').textContent =
+      'SeaCast 365 Preferred Providers • Maximum 3 per category • Must maintain a 9.0/10 rating or better.';
+    document.getElementById('sc365PreferredProviders').innerHTML = d.providers.map((name,i) =>
+      '<div class="provider">' +
+        '<div>' + (i+1) + '. ' + name + '</div>' +
+        '<span class="rating">Preferred Provider • 9.0/10 minimum</span>' +
+      '</div>'
+    ).join('');
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden','false');
+  };
+
+  window.sc365ClosePreferred = function(){
+    const modal = document.getElementById('sc365PreferredModal');
+    modal.style.display='none';
+    modal.setAttribute('aria-hidden','true');
+  };
+
+  document.getElementById('sc365PreferredModal').addEventListener('click', function(e){
+    if(e.target === this) sc365ClosePreferred();
+  });
+
+  // Robust mobile tap handling by visible tile text.
+  document.addEventListener('click', function(e){
+    const el = e.target.closest('button, .service, [role="button"], a, div');
+    if(!el) return;
+    const t = (el.innerText || el.textContent || '').replace(/\s+/g,' ').trim().toLowerCase();
+
+    let key = null;
+    if(t === 'marine mechanics' || t.includes('marine mechanics')) key = 'mechanics';
+    else if(t.includes('detailing') && t.includes('clean')) key = 'detailing';
+    else if(t.includes('electronics') && (t.includes('gps') || t.includes('marine'))) key = 'electronics';
+    else if(t.includes('canvas') && t.includes('upholstery')) key = 'canvas';
+
+    if(key){
+      e.preventDefault();
+      e.stopPropagation();
+      sc365OpenPreferred(key);
+    }
+  }, true);
+})();
+</script>
+
+
+<script id="seacast-pwa-register">
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+</script>
+
+
+<script id="sc365-supabase-fallback">
+(function(){
+  if(window.supabase && typeof window.supabase.createClient==='function') return;
+  const SESSION_KEY='seacastFallbackAuthSession';
+  function createClient(baseUrl, apiKey){
+    let session=null;
+    const listeners=[];
+    try{ session=JSON.parse(localStorage.getItem(SESSION_KEY)||'null'); }catch(e){}
+    const headers=(token, extra={})=>Object.assign({apikey:apiKey,'Content-Type':'application/json'},token?{Authorization:'Bearer '+token}:{},extra);
+    const parseError=async r=>{let d=null;try{d=await r.json()}catch(e){};const msg=d?.msg||d?.message||d?.error_description||d?.error||('Request failed ('+r.status+')');return {message:msg,status:r.status};};
+    async function request(path,opts={}){
+      const r=await fetch(baseUrl+path,{method:opts.method||'GET',headers:headers(opts.token,opts.headers||{}),body:opts.body===undefined?undefined:JSON.stringify(opts.body)});
+      if(!r.ok) throw await parseError(r);
+      if(r.status===204) return null;
+      const t=await r.text(); if(!t) return null; try{return JSON.parse(t)}catch(e){return t}
+    }
+    function saveSession(s,event){session=s||null;try{s?localStorage.setItem(SESSION_KEY,JSON.stringify(s)):localStorage.removeItem(SESSION_KEY)}catch(e){};listeners.forEach(fn=>{try{fn(event||'SIGNED_IN',session)}catch(e){}})}
+    class Query{
+      constructor(table){this.table=table;this.method='GET';this.body=undefined;this.filters=[];this.columns='*';this.prefer=[];this.onConflict='';this.mode='array'}
+      select(cols='*'){this.columns=cols;return this}
+      eq(k,v){this.filters.push(encodeURIComponent(k)+'=eq.'+encodeURIComponent(v));return this}
+      gte(k,v){this.filters.push(encodeURIComponent(k)+'=gte.'+encodeURIComponent(v));return this}
+      update(body){this.method='PATCH';this.body=body;return this}
+      insert(body){this.method='POST';this.body=body;return this}
+      upsert(body,opt={}){this.method='POST';this.body=body;this.prefer.push('resolution=merge-duplicates');this.onConflict=opt.onConflict||'';return this}
+      maybeSingle(){this.mode='maybe';return this.exec()}
+      single(){this.mode='single';return this.exec()}
+      then(resolve,reject){return this.exec().then(resolve,reject)}
+      async exec(){
+        const qs=[...this.filters];
+        if(this.columns) qs.push('select='+encodeURIComponent(this.columns));
+        if(this.onConflict) qs.push('on_conflict='+encodeURIComponent(this.onConflict));
+        const extra={};
+        if(this.method!=='GET') this.prefer.push('return=representation');
+        if(this.prefer.length) extra.Prefer=[...new Set(this.prefer)].join(',');
+        try{
+          let data=await request('/rest/v1/'+encodeURIComponent(this.table)+(qs.length?'?'+qs.join('&'):''),{method:this.method,body:this.body,token:session?.access_token,headers:extra});
+          if(this.mode==='maybe') data=Array.isArray(data)?(data[0]||null):data;
+          if(this.mode==='single'){
+            data=Array.isArray(data)?data[0]:data;
+            if(!data) return {data:null,error:{message:'No row returned'}};
+          }
+          return {data:data??(this.method==='GET'?[]:null),error:null};
+        }catch(error){return {data:null,error};}
+      }
+    }
+    const auth={
+      async signUp({email,password,options={}}){
+        try{const d=await request('/auth/v1/signup',{method:'POST',body:{email,password,data:options.data||{}}});const s=d?.access_token?{access_token:d.access_token,refresh_token:d.refresh_token,user:d.user}:null;if(s)saveSession(s,'SIGNED_IN');return {data:{user:d?.user||null,session:s},error:null}}catch(error){return {data:{user:null,session:null},error}}
+      },
+      async signInWithPassword({email,password}){
+        try{const d=await request('/auth/v1/token?grant_type=password',{method:'POST',body:{email,password}});const s={access_token:d.access_token,refresh_token:d.refresh_token,user:d.user};saveSession(s,'SIGNED_IN');return {data:{user:d.user,session:s},error:null}}catch(error){return {data:{user:null,session:null},error}}
+      },
+      async getSession(){return {data:{session},error:null}},
+      async signOut(){
+        try{if(session?.access_token)await request('/auth/v1/logout',{method:'POST',token:session.access_token})}catch(e){}
+        saveSession(null,'SIGNED_OUT');return {error:null}
+      },
+      onAuthStateChange(cb){listeners.push(cb);return {data:{subscription:{unsubscribe(){const i=listeners.indexOf(cb);if(i>=0)listeners.splice(i,1)}}}}}
+    };
+    return {
+      auth,
+      from(table){return new Query(table)},
+      functions:{async invoke(name,{body}={}){try{const data=await request('/functions/v1/'+encodeURIComponent(name),{method:'POST',body:body||{},token:session?.access_token});return {data,error:null}}catch(error){return {data:null,error}}}}
+    };
+  }
+  window.supabase={createClient};
+  window.sc365UsingBuiltInSupabaseFallback=true;
+})();
+</script>
+
+
+<script id="rc6-live-backend-functions">
+(function(){
+ const SUPABASE_URL='https://thsavqdzaqbnelzwqokw.supabase.co';
+ const SUPABASE_PUBLISHABLE_KEY='sb_publishable_Ya2ENj_P_5pX3cdwdlbIPA_PpXBNN1v';
+ const sbGlobal=window.supabase;
+ const scDb=sbGlobal && sbGlobal.createClient ? sbGlobal.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}) : null;
+ window.sc365Db=scDb;
+ let currentUser=null;
+ let liveMap=null, ownPrivateMarker=null, boatLayer=null, marinaLayer=null, geoWatchId=null, lastPresenceUpdate=0;
+ const get=(k,d='')=>{try{return localStorage.getItem(k) ?? d}catch(e){return d}};
+ const set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+ const val=id=>{const el=document.getElementById(id);return el?el.value.trim():''};
+ const safeNum=v=>{const n=parseFloat(String(v||'').replace(/[^0-9.]/g,''));return Number.isFinite(n)?n:null};
+ const activityEmoji=a=>({Cruising:'🚤',Sailing:'⛵',Fishing:'🎣',Swimming:'🏊',Diving:'🤿'})[a]||'🚤';
+ function authMessage(msg,isError=true){const el=document.getElementById('authError');if(!el)return;el.textContent=msg||'';el.style.display=msg?'block':'none';el.style.background=isError?'#fff0f0':'#eaf8ef';el.style.color=isError?'#a01919':'#0d6a33'}
+ function deletionError(msg){const el=document.getElementById('accountDeleteError');if(!el)return;el.textContent=msg||'';el.style.display=msg?'block':'none'}
+ function profileFromFields(){return {name:val('profileName'),marina:val('profileMarina'),boatType:val('profileBoatType'),boatLength:val('profileBoatLength'),contact:val('profileContact')}}
+ function clearSeaCastLocal(){try{const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&/^seacast/i.test(k))keys.push(k)}keys.forEach(k=>localStorage.removeItem(k));const sk=[];for(let i=0;i<sessionStorage.length;i++){const k=sessionStorage.key(i);if(k&&/^seacast/i.test(k))sk.push(k)}sk.forEach(k=>sessionStorage.removeItem(k))}catch(e){}}
+ function refreshToggle(id,on){const b=document.getElementById(id);if(!b)return;b.classList.toggle('on',on);b.classList.toggle('off',!on);b.textContent=on?'YES':'NO'}
+ function refreshNavPages(){let p={};try{p=JSON.parse(get('seacastProfile','{}'))||{}}catch(e){};const map={profileName:p.name||'',profileMarina:p.marina||'Gasparilla Marina',profileBoatType:p.boatType||'',profileBoatLength:p.boatLength||'',profileContact:p.contact||''};Object.entries(map).forEach(([id,v])=>{const el=document.getElementById(id);if(el&&document.activeElement!==el)el.value=v});const a=get('seacastActivity','');const at=document.getElementById('profileActivityText');if(at)at.textContent='Activity: '+(a||'Not selected');const marinaMsg=document.getElementById('savedMarinaMessage');if(marinaMsg)marinaMsg.textContent=(p.marina||'Your home marina')+' notices will appear here.';refreshToggle('settingsVisibility',get('seacastVisibility','off')==='on');refreshToggle('settingsNotifications',get('seacastNotifications','on')==='on');refreshToggle('settingsMarinaMessages',get('seacastMarinaMessages','on')==='on')}
+ function setVisibilityUI(on){const toggle=document.getElementById('visibilityToggle');const status=document.getElementById('visibilityStatus');if(toggle)toggle.classList.toggle('is-on',!!on);if(status){status.classList.toggle('off',!on);const a=get('seacastActivity','');status.textContent=on?(a?'● YES — You are visible as: '+a+'.':'● YES — Choose what you are doing before appearing on the map.'):'● NO — You are not visible to other SeaCast boaters.'}set('seacastVisibility',on?'on':'off');refreshToggle('settingsVisibility',!!on)}
+ function updateAuthUI(){const signed=!!currentUser;const out=document.getElementById('authSignedOut'),inn=document.getElementById('authSignedIn'),pill=document.getElementById('authStatusPill'),email=document.getElementById('authUserEmail');if(out)out.style.display=signed?'none':'block';if(inn)inn.style.display=signed?'block':'none';if(pill){pill.textContent=signed?'LIVE ACCOUNT':'SIGNED OUT';pill.classList.toggle('live',signed)}if(email)email.textContent=signed?(currentUser.email||'SeaCast user'):'';if(!signed)setVisibilityUI(false)}
+ async function loadCloudProfile(){if(!scDb||!currentUser)return;const {data,error}=await scDb.from('profiles').select('display_name,home_marina,boat_type,boat_length_ft,contact_phone').eq('id',currentUser.id).maybeSingle();if(error){console.warn('profile load',error.message);return}if(data){const p={name:data.display_name||'',marina:data.home_marina||'Gasparilla Marina',boatType:data.boat_type||'',boatLength:data.boat_length_ft?String(data.boat_length_ft):'',contact:data.contact_phone||''};set('seacastProfile',JSON.stringify(p));refreshNavPages()}const {data:presence}=await scDb.from('boater_presence').select('is_visible,activity').eq('user_id',currentUser.id).maybeSingle();if(presence){if(presence.activity)set('seacastActivity',presence.activity);setVisibilityUI(!!presence.is_visible);refreshNavPages();if(presence.is_visible)startGeoWatch()}}
+ window.seaCastSignUp=async function(){const email=val('authEmail'),password=val('authPassword');if(!scDb)return authMessage('SeaCast account service is unavailable in this viewer. Open this file in Safari while connected to the internet.');if(!email||password.length<8)return authMessage('Enter a valid email and a password of at least 8 characters.');authMessage('Creating your SeaCast 365 account…',false);try{const {data,error}=await scDb.auth.signUp({email,password,options:{data:{display_name:''}}});if(error)return authMessage(error.message||'Account could not be created.');if(data&&data.session){currentUser=data.session.user||data.user||null;updateAuthUI();authMessage('Account created and signed in.',false)}else{authMessage('Account created. Check your email to confirm it, then return here and sign in.',false)}}catch(e){console.error(e);authMessage('SeaCast reached the button, but could not reach the account server. Open in Safari and make sure you are online.')}};
+ window.seaCastSignIn=async function(){if(!scDb)return authMessage('SeaCast account service is unavailable in this viewer. Open this file in Safari while connected to the internet.');const email=val('authEmail'),password=val('authPassword');if(!email||!password)return authMessage('Enter your email and password.');authMessage('Signing in…',false);try{const {data,error}=await scDb.auth.signInWithPassword({email,password});if(error)return authMessage(error.message||'Sign in failed.');currentUser=data?.session?.user||data?.user||currentUser;updateAuthUI();authMessage('',false);if(currentUser)await loadCloudProfile()}catch(e){console.error(e);authMessage('SeaCast reached the button, but could not reach the account server. Open in Safari and make sure you are online.')}};
+ window.seaCastSignOut=async function(){if(!scDb)return;try{await syncPresence(false)}catch(e){};if(geoWatchId!==null&&navigator.geolocation){navigator.geolocation.clearWatch(geoWatchId);geoWatchId=null}await scDb.auth.signOut();currentUser=null;setVisibilityUI(false);updateAuthUI();refreshLiveBoaterMap()};
+ window.saveSeaCastProfile=async function(){const p=profileFromFields();set('seacastProfile',JSON.stringify(p));refreshNavPages();const box=document.getElementById('profileSaved');if(!currentUser||!scDb){authMessage('Sign in to save this profile to your SeaCast 365 account.');return}const {error}=await scDb.from('profiles').upsert({id:currentUser.id,display_name:p.name,home_marina:p.marina,boat_type:p.boatType,boat_length_ft:safeNum(p.boatLength),contact_phone:p.contact},{onConflict:'id'});if(error){authMessage('Profile could not be saved: '+error.message);return}if(box){box.style.display='block';setTimeout(()=>box.style.display='none',2200)}authMessage('',false);if(get('seacastVisibility','off')==='on')syncPresence(true)};
+ window.saveSeaCastMessage=function(){const to=document.getElementById('messageTo'),body=document.getElementById('messageBody');if(!body||!body.value.trim()){alert('Please enter a message first.');return}set('seacastDraftMessage',JSON.stringify({to:to?to.value:'',body:body.value.trim(),savedAt:new Date().toISOString()}));const box=document.getElementById('messageSaved');if(box)box.style.display='block'};
+ window.toggleSetting=function(key,id){const current=get(key,'on')==='on';set(key,current?'off':'on');refreshToggle(id,!current)};
+ window.toggleSettingsVisibility=function(){window.setVisibility(get('seacastVisibility','off')!=='on')};
+ window.setVisibility=function(on){if(on&&!currentUser){setVisibilityUI(false);authMessage('Sign in first, then turn Make Myself Known to YES.');location.hash='#myProfilePage';return}if(on&&!get('seacastActivity','')){setVisibilityUI(false);if(typeof openBoatActivity==='function')setTimeout(openBoatActivity,0);return}setVisibilityUI(!!on);syncPresence(!!on)};
+ async function syncPresence(on,activityOverride){if(!scDb||!currentUser)return;if(!on){if(geoWatchId!==null&&navigator.geolocation){navigator.geolocation.clearWatch(geoWatchId);geoWatchId=null}await scDb.from('boater_presence').update({is_visible:false,latitude:null,longitude:null,accuracy_m:null,speed_knots:null,heading_deg:null}).eq('user_id',currentUser.id);setVisibilityUI(false);refreshLiveBoaterMap();return}const activity=activityOverride||get('seacastActivity','');if(!activity){setVisibilityUI(false);return}if(!navigator.geolocation){alert('Location services are not available on this device.');setVisibilityUI(false);return}const p=(()=>{try{return JSON.parse(get('seacastProfile','{}'))||{}}catch(e){return {}}})();const push=async pos=>{const c=pos.coords;const payload={user_id:currentUser.id,is_visible:true,activity,map_name:p.name||'SeaCast Boater',boat_type:p.boatType||null,boat_length_ft:safeNum(p.boatLength),zone:'Charlotte Harbor',latitude:c.latitude,longitude:c.longitude,accuracy_m:c.accuracy??null,speed_knots:Number.isFinite(c.speed)?Math.max(0,c.speed*1.943844):null,heading_deg:Number.isFinite(c.heading)?c.heading:null};const {error}=await scDb.from('boater_presence').upsert(payload,{onConflict:'user_id'});if(error){console.error(error);alert('SeaCast could not update your live map position.');setVisibilityUI(false);return}setVisibilityUI(true);lastPresenceUpdate=Date.now();refreshLiveBoaterMap()};navigator.geolocation.getCurrentPosition(push,err=>{alert('SeaCast needs location permission to make you visible on the Boaters Map.');setVisibilityUI(false);console.warn(err)},{enableHighAccuracy:true,timeout:12000,maximumAge:10000});startGeoWatch()}
+ window.sc365SyncPresence=syncPresence;
+ function startGeoWatch(){if(!currentUser||get('seacastVisibility','off')!=='on'||!navigator.geolocation||geoWatchId!==null)return;geoWatchId=navigator.geolocation.watchPosition(pos=>{if(Date.now()-lastPresenceUpdate<10000)return;const activity=get('seacastActivity','');if(!activity)return;const p=(()=>{try{return JSON.parse(get('seacastProfile','{}'))||{}}catch(e){return {}}})();const c=pos.coords;scDb.from('boater_presence').upsert({user_id:currentUser.id,is_visible:true,activity,map_name:p.name||'SeaCast Boater',boat_type:p.boatType||null,boat_length_ft:safeNum(p.boatLength),zone:'Charlotte Harbor',latitude:c.latitude,longitude:c.longitude,accuracy_m:c.accuracy??null,speed_knots:Number.isFinite(c.speed)?Math.max(0,c.speed*1.943844):null,heading_deg:Number.isFinite(c.heading)?c.heading:null},{onConflict:'user_id'}).then(()=>{lastPresenceUpdate=Date.now();if(location.hash==='#boatersMapLive')refreshLiveBoaterMap()})},()=>{},{enableHighAccuracy:true,maximumAge:15000,timeout:20000})}
+ function ensureMap(){if(liveMap||!window.L)return liveMap;const el=document.getElementById('liveLeafletMap');if(!el)return null;liveMap=L.map(el,{zoomControl:true}).setView([26.95,-82.08],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(liveMap);boatLayer=L.layerGroup().addTo(liveMap);marinaLayer=L.layerGroup().addTo(liveMap);setTimeout(()=>liveMap.invalidateSize(),100);return liveMap}
+ window.sc365LocateMe=function(){const m=ensureMap();if(!m)return;if(!navigator.geolocation){alert('Location services are not available.');return}const s=document.getElementById('liveMapStatus');if(s)s.textContent='Locating you…';navigator.geolocation.getCurrentPosition(pos=>{const latlng=[pos.coords.latitude,pos.coords.longitude];m.setView(latlng,15);if(ownPrivateMarker)m.removeLayer(ownPrivateMarker);ownPrivateMarker=L.marker(latlng,{icon:L.divIcon({className:'',html:'<div class="sc365-live-dot"></div>',iconSize:[24,24],iconAnchor:[12,12]})}).addTo(m).bindPopup('Your current position'+(get('seacastVisibility','off')==='on'?'<br><b>Visible to SeaCast boaters</b>':'<br><b>Private — not shared</b>'));if(s)s.textContent=get('seacastVisibility','off')==='on'?'Your position is live and shared because Make Myself Known is YES.':'Your position is shown privately on this device. Make Myself Known is NO.'},()=>{if(s)s.textContent='Location permission is needed to show your position.'},{enableHighAccuracy:true,timeout:12000,maximumAge:5000})};
+ window.refreshLiveBoaterMap=async function(){const m=ensureMap();if(!m||!scDb)return;setTimeout(()=>m.invalidateSize(),80);if(boatLayer)boatLayer.clearLayers();if(marinaLayer)marinaLayer.clearLayers();const status=document.getElementById('liveMapStatus');const cutoff=new Date(Date.now()-15*60*1000).toISOString();const {data:boats,error}=await scDb.from('boater_presence').select('user_id,map_name,boat_type,boat_length_ft,activity,latitude,longitude,updated_at').eq('is_visible',true).eq('zone','Charlotte Harbor').gte('updated_at',cutoff);if(error&&status){status.textContent=currentUser?'Live boat data could not load.':'Sign in to view live participating SeaCast boaters.'}const showBoats=document.getElementById('showBoats')?.checked!==false,showNames=document.getElementById('showNames')?.checked!==false,showActivities=document.getElementById('showActivities')?.checked!==false;if(showBoats&&(boats||[]).length){for(const b of boats){if(!Number.isFinite(b.latitude)||!Number.isFinite(b.longitude))continue;const emoji=activityEmoji(b.activity);const label=[showNames?(b.map_name||'SeaCast Boater'):'',showActivities?(b.activity||''):''].filter(Boolean).join(' • ');const icon=L.divIcon({className:'',html:'<div style="font-size:28px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))">'+emoji+'</div>',iconSize:[32,32],iconAnchor:[16,16]});const marker=L.marker([b.latitude,b.longitude],{icon}).addTo(boatLayer);const detail=(b.map_name||'SeaCast Boater')+(b.activity?'<br>'+b.activity:'')+(b.boat_type?'<br>'+b.boat_type:'');marker.bindPopup(detail);if(label)marker.bindTooltip(label,{permanent:showNames,direction:'top',className:'sc365-boat-label'})}}const {data:marinas}=await scDb.from('marinas').select('name,latitude,longitude,city,website').eq('zone','Charlotte Harbor').eq('is_active',true);for(const a of marinas||[]){const marker=L.marker([a.latitude,a.longitude],{icon:L.divIcon({className:'',html:'<div style="font-size:24px">⚓</div>',iconSize:[28,28],iconAnchor:[14,14]})}).addTo(marinaLayer);marker.bindPopup('<b>'+a.name+'</b>'+(a.city?'<br>'+a.city:''))}if(status){const n=(boats||[]).filter(b=>Number.isFinite(b.latitude)&&Number.isFinite(b.longitude)).length;status.textContent=currentUser?'Live Charlotte Harbor map • '+n+' visible SeaCast boater'+(n===1?'':'s')+'.':'Real Charlotte Harbor map • Sign in to see participating SeaCast boaters.'}};
+ window.openDeleteAccountConfirm=function(){deletionError('');const modal=document.getElementById('accountDeleteModal');if(!modal)return;modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'};
+ window.closeDeleteAccountConfirm=function(){const modal=document.getElementById('accountDeleteModal');if(!modal)return;modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''};
+ window.deleteSeaCastAccount=async function(){if(!scDb||!currentUser){deletionError('Sign in to your SeaCast 365 account before deleting it.');return}const btn=document.getElementById('accountConfirmDeleteButton');if(btn){btn.disabled=true;btn.textContent='DELETING…'}deletionError('');try{await syncPresence(false);const {data,error}=await scDb.functions.invoke('delete-account',{body:{confirm:true}});if(error||!data?.deleted)throw error||new Error('Account deletion was not confirmed.');clearSeaCastLocal();try{await scDb.auth.signOut({scope:'local'})}catch(e){};currentUser=null;window.closeDeleteAccountConfirm();['profileName','profileBoatType','profileBoatLength','profileContact'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});const marina=document.getElementById('profileMarina');if(marina)marina.value='Gasparilla Marina';setVisibilityUI(false);updateAuthUI();refreshNavPages();refreshLiveBoaterMap();const success=document.getElementById('accountDeleteSuccess');if(success){success.style.display='block';setTimeout(()=>success.style.display='none',5000)}}catch(e){deletionError('Account deletion could not be completed. Please try again while connected to the internet.');console.error(e)}finally{if(btn){btn.disabled=false;btn.textContent='PERMANENTLY DELETE'}}};
+ const oldChoose=window.chooseActivity;window.chooseActivity=function(name,emoji){if(typeof oldChoose==='function')oldChoose(name,emoji);set('seacastActivity',name);if(currentUser){setVisibilityUI(true);syncPresence(true,name)}else{setVisibilityUI(false);authMessage('Activity selected. Sign in before making yourself visible on the live map.')}};
+ const oldSaveTrip=window.saveTripPlan;window.saveTripPlan=async function(){if(typeof oldSaveTrip==='function')oldSaveTrip();if(!scDb||!currentUser)return;const local=(()=>{try{return JSON.parse(get('seacastTripSchedule','null'))}catch(e){return null}})();if(!local)return;const toIso=v=>{if(!v)return null;const d=new Date(v);return Number.isNaN(d.getTime())?null:d.toISOString()};const row={user_id:currentUser.id,trip_name:local.tripName||null,start_point:local.startPoint||null,start_time:toIso(local.startTime),end_point:local.endPoint||null,end_time:toIso(local.endTime),reason:local.reason||null,passenger_count:parseInt(local.passengers)||null,possible_destinations:local.possible||null,passenger_bring_notes:local.bring||null,captain_notes:local.notes||null};const existing=get('seacastCloudTripId','');let result;if(existing)result=await scDb.from('trip_plans').update(row).eq('id',existing).select('id').maybeSingle();else result=await scDb.from('trip_plans').insert(row).select('id').single();const msg=document.getElementById('tripPlannerMessage');if(result.error){if(msg)msg.textContent='Saved on this device, but the SeaCast cloud save failed.'}else{if(result.data?.id)set('seacastCloudTripId',result.data.id);if(msg)msg.textContent='Trip schedule saved securely to your SeaCast 365 account.'}};
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')window.closeDeleteAccountConfirm()});
+ ['showBoats','showNames','showActivities','showEmergencies'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>window.refreshLiveBoaterMap()));
+ window.addEventListener('hashchange',()=>{refreshNavPages();if(location.hash==='#boatersMapLive')setTimeout(()=>window.refreshLiveBoaterMap(),80)});
+ document.addEventListener('DOMContentLoaded',async()=>{refreshNavPages();if(!scDb){authMessage('Live account service could not load. Check your internet connection.');return}const {data}=await scDb.auth.getSession();currentUser=data.session?.user||null;updateAuthUI();if(currentUser)await loadCloudProfile();scDb.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;updateAuthUI();if(currentUser)setTimeout(loadCloudProfile,0);else setVisibilityUI(false)});if(location.hash==='#boatersMapLive')setTimeout(()=>window.refreshLiveBoaterMap(),100)});
+})();
+</script>
+<!-- RC7: HTTPS-hosted production test build; same approved design, optimized embedded logo -->
+</body>
+</html>
