@@ -4,6 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<!-- SeaCast365 demo build: 2026-08-22 live-weather-wind-time-tides -->
 <title>SeaCast 365 RC5 Live •</title>
 <style>
 :root{
@@ -24,15 +25,21 @@ body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Seg
 .logo{text-align:center;display:flex;align-items:center;justify-content:center}
 .logo img{display:block;max-width:190px;max-height:92px;width:auto;height:auto;object-fit:contain}
 .badge{position:absolute;margin-left:-10px;margin-top:-8px;background:#ed2224;color:white;font-size:11px;font-weight:800;border-radius:99px;padding:3px 6px}
-.hero{height:250px;position:relative;overflow:hidden;background:
+.hero{height:286px;position:relative;overflow:hidden;background:
 linear-gradient(100deg,rgba(0,55,88,.55),rgba(0,0,0,.05)),
 radial-gradient(circle at 74% 20%,#ff3900 0 7%,#ffb000 9% 15%,#19ad5b 17% 27%,transparent 31%),
 linear-gradient(130deg,#1775b7 0 43%,#70a55e 43% 100%)}
 .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,20,45,.28))}
-.weather{position:absolute;z-index:2;top:18px;left:14px;background:rgba(0,24,46,.82);color:#fff;padding:13px 15px;border-radius:10px;width:154px}
-.weather .label{font-size:11px;font-weight:800;letter-spacing:.4px}
-.temp{font-size:50px;font-weight:800;line-height:1;margin:7px 0}
-.weather .small{font-size:13px}
+.weather{position:absolute;z-index:2;top:12px;left:12px;background:rgba(0,24,46,.90);color:#fff;padding:12px 14px;border-radius:12px;width:238px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.weather .label{font-size:10px;font-weight:900;letter-spacing:.6px;display:flex;align-items:center;gap:6px}
+.weather .live-dot{width:7px;height:7px;border-radius:50%;background:#42df88;display:inline-block;box-shadow:0 0 0 3px rgba(66,223,136,.16)}
+.temp{font-size:43px;font-weight:900;line-height:1;margin:5px 0 3px}
+.weather .small{font-size:12px;line-height:1.3}
+.weather .condition{font-weight:800;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weather .condition-row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;padding:5px 0;border-top:1px solid rgba(255,255,255,.20);font-size:11px;line-height:1.2}
+.weather .condition-row b{font-size:9px;letter-spacing:.45px;opacity:.72;white-space:nowrap}
+.weather .condition-row span{text-align:right;font-weight:900;min-width:0}
+.weather .updated{font-size:9px;opacity:.66;margin-top:4px;text-align:right}
 .location{position:absolute;z-index:2;bottom:16px;left:18px;color:#fff;font-size:17px;font-weight:750}
 .radarbtn{position:absolute;z-index:2;right:14px;bottom:44px;background:rgba(0,24,46,.88);color:#fff;border:0;padding:13px 16px;border-radius:10px;font-weight:800;font-size:14px}
 .section{border-radius:16px 16px 0 0;padding:18px 14px 16px;margin-top:-1px;position:relative}
@@ -1215,13 +1222,15 @@ linear-gradient(130deg,#1775b7 0 43%,#70a55e 43% 100%)}
 <div class="visibility-status off" id="visibilityStatus">● NO — You are not visible to other SeaCast boaters.</div>
 </section>
 <section class="hero">
-<div class="weather">
-<div class="label">CURRENT CONDITIONS</div>
-<div class="temp">87°</div>
-<div class="small">Partly Cloudy</div>
-<hr style="border:0;border-top:1px solid rgba(255,255,255,.35)"/>
-<div class="small"><b>WIND</b><br/>SE   12 mph</div>
-<div class="small" style="margin-top:8px"><b>WATER TEMP</b>   82°F</div>
+<div class="weather" aria-live="polite">
+<div class="label"><span class="live-dot"></span>LIVE CONDITIONS</div>
+<div class="temp" id="homeWxTemp">--°</div>
+<div class="small condition" id="homeWxCondition">Loading Charlotte Harbor weather…</div>
+<div class="condition-row"><b>LOCAL TIME</b><span id="homeWxTime">--</span></div>
+<div class="condition-row"><b>WIND</b><span id="homeWxWind">Loading…</span></div>
+<div class="condition-row"><b>TIDE</b><span id="homeWxTide">Loading…</span></div>
+<div class="condition-row"><b>NEXT TIDE</b><span id="homeWxNextTide">Loading…</span></div>
+<div class="updated" id="homeWxUpdated">Charlotte Harbor</div>
 </div>
 <a class="radarbtn" href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJ3ZWF0aGVyIiwiY2VudGVyIjpbLTgyLjEsMjYuOTddLCJ6b29tIjo4LCJsb2NhdGlvbiI6Wy04Mi4xLDI2Ljk3XX0sImFuaW1hdGluZyI6dHJ1ZSwiYmFzZSI6InN0YW5kYXJkIiwiYXJ0Y2MiOmZhbHNlLCJjb3VudHkiOmZhbHNlLCJjd2EiOmZhbHNlLCJyZmMiOmZhbHNlLCJzdGF0ZSI6ZmFsc2UsIm1lbnUiOnRydWUsInNob3J0RnVzZWRPbmx5IjpmYWxzZSwib3BhY2l0eSI6eyJhbGVydHMiOjAuNiwibG9jYWwiOjAuNiwibG9jYWxTdGF0aW9ucyI6MC44LCJuYXRpb25hbCI6MC42fX0%3D" rel="noopener" style="text-decoration:none;display:inline-block;" target="_blank">▶ LIVE RADAR</a>
 <div class="location">📍 Port Charlotte, FL</div>
@@ -3526,6 +3535,163 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')){
  document.addEventListener('DOMContentLoaded',async()=>{refreshNavPages();if(!scDb){authMessage('Live account service could not load. Check your internet connection.');return}const {data}=await scDb.auth.getSession();currentUser=data.session?.user||null;updateAuthUI();if(currentUser)await loadCloudProfile();scDb.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;updateAuthUI();if(currentUser)setTimeout(loadCloudProfile,0);else setVisibilityUI(false)});if(location.hash==='#boatersMapLive')setTimeout(()=>window.refreshLiveBoaterMap(),100)});
 })();
 </script>
+
+<script id="sc365-live-home-conditions">
+(function(){
+  const LAT=26.95, LON=-82.08;
+  const TIDE_STATION='8725744';
+  const ET_ZONE='America/New_York';
+
+  function byId(id){ return document.getElementById(id); }
+  function setText(id,value){ const n=byId(id); if(n) n.textContent=value; }
+
+  function formatEasternTime(date){
+    return new Intl.DateTimeFormat('en-US',{
+      timeZone:ET_ZONE,hour:'numeric',minute:'2-digit',hour12:true
+    }).format(date);
+  }
+
+  function easternParts(date){
+    const parts=new Intl.DateTimeFormat('en-US',{
+      timeZone:ET_ZONE,year:'numeric',month:'2-digit',day:'2-digit',
+      hour:'2-digit',minute:'2-digit',hourCycle:'h23'
+    }).formatToParts(date);
+    const v=t=>parts.find(p=>p.type===t)?.value || '';
+    return {year:v('year'),month:v('month'),day:v('day'),hour:v('hour'),minute:v('minute')};
+  }
+
+  function easternStamp(date){
+    const p=easternParts(date);
+    return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}`;
+  }
+
+  function ymd(date){
+    const p=easternParts(date);
+    return `${p.year}${p.month}${p.day}`;
+  }
+
+  function noaaTime12(localStamp){
+    const hhmm=String(localStamp||'').slice(11,16);
+    const m=hhmm.match(/^(\d{2}):(\d{2})$/);
+    if(!m) return hhmm || '--';
+    let h=Number(m[1]);
+    const suffix=h>=12?'PM':'AM';
+    h=h%12||12;
+    return `${h}:${m[2]} ${suffix}`;
+  }
+
+  function compass(deg){
+    if(deg===null || deg===undefined || !Number.isFinite(Number(deg))) return '';
+    const dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+    return dirs[Math.round(Number(deg)/22.5)%16];
+  }
+
+  function refreshClock(){
+    setText('homeWxTime',formatEasternTime(new Date()));
+  }
+
+  async function refreshWeather(){
+    try{
+      const pointResp=await fetch(`https://api.weather.gov/points/${LAT},${LON}`,{headers:{Accept:'application/geo+json'}});
+      if(!pointResp.ok) throw new Error('NWS point unavailable');
+      const point=await pointResp.json();
+      const forecastUrl=point?.properties?.forecastHourly;
+      const stationsUrl=point?.properties?.observationStations;
+      if(!forecastUrl) throw new Error('NWS forecast unavailable');
+
+      const [forecastResp,stationsResp]=await Promise.all([
+        fetch(forecastUrl,{headers:{Accept:'application/geo+json'}}),
+        stationsUrl ? fetch(stationsUrl,{headers:{Accept:'application/geo+json'}}) : Promise.resolve(null)
+      ]);
+      if(!forecastResp.ok) throw new Error('NWS hourly forecast unavailable');
+      const forecast=await forecastResp.json();
+      const period=forecast?.properties?.periods?.[0] || null;
+
+      let obs=null;
+      if(stationsResp?.ok){
+        const stations=await stationsResp.json();
+        const station=stations?.features?.[0]?.id;
+        if(station){
+          const obsResp=await fetch(station+'/observations/latest',{headers:{Accept:'application/geo+json'}});
+          if(obsResp.ok) obs=await obsResp.json();
+        }
+      }
+
+      const op=obs?.properties || {};
+      let tempF=null;
+      if(op.temperature?.value!==null && op.temperature?.value!==undefined && Number.isFinite(Number(op.temperature.value))){
+        tempF=Math.round(Number(op.temperature.value)*9/5+32);
+      }else if(period && Number.isFinite(Number(period.temperature))){
+        tempF=Math.round(Number(period.temperature));
+      }
+      setText('homeWxTemp',tempF===null?'--°':`${tempF}°`);
+      setText('homeWxCondition',op.textDescription || period?.shortForecast || 'Current conditions');
+
+      let wind='Unavailable';
+      if(op.windSpeed?.value!==null && op.windSpeed?.value!==undefined && Number.isFinite(Number(op.windSpeed.value))){
+        const knots=Math.round(Number(op.windSpeed.value)*1.943844);
+        const dir=compass(op.windDirection?.value);
+        wind=`${dir?dir+' ':''}${knots} kt`;
+      }else if(period){
+        wind=`${period.windDirection||''} ${period.windSpeed||''}`.trim() || 'Unavailable';
+      }
+      setText('homeWxWind',wind);
+      setText('homeWxUpdated','Live • Updated '+formatEasternTime(new Date()));
+    }catch(e){
+      setText('homeWxCondition','Weather temporarily unavailable');
+      setText('homeWxWind','Tap LIVE RADAR');
+      setText('homeWxUpdated','Internet connection required for live conditions');
+    }
+  }
+
+  async function refreshTides(){
+    try{
+      const now=new Date();
+      const tomorrow=new Date(now.getTime()+36*60*60*1000);
+      const url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter'
+        +'?product=predictions'
+        +'&application=SeaCast365'
+        +'&begin_date='+ymd(now)
+        +'&end_date='+ymd(tomorrow)
+        +'&datum=MLLW'
+        +'&station='+TIDE_STATION
+        +'&time_zone=lst_ldt'
+        +'&units=english'
+        +'&interval=hilo'
+        +'&format=json';
+      const resp=await fetch(url);
+      if(!resp.ok) throw new Error('NOAA tide unavailable');
+      const data=await resp.json();
+      const list=Array.isArray(data?.predictions)?data.predictions:[];
+      if(!list.length) throw new Error('No tide predictions');
+      const nowStamp=easternStamp(now);
+      const next=list.find(p=>String(p.t)>=nowStamp) || list[list.length-1];
+      const rising=next.type==='H';
+      setText('homeWxTide',rising?'↑ Rising':'↓ Falling');
+      const kind=next.type==='H'?'High':'Low';
+      const height=Number(next.v);
+      const heightText=Number.isFinite(height)?` • ${height.toFixed(1)} ft`:'';
+      setText('homeWxNextTide',`${kind} ${noaaTime12(next.t)}${heightText}`);
+    }catch(e){
+      setText('homeWxTide','Prediction unavailable');
+      setText('homeWxNextTide','Tap Weather & Maps');
+    }
+  }
+
+  function start(){
+    refreshClock();
+    refreshWeather();
+    refreshTides();
+    setInterval(refreshClock,30000);
+    setInterval(refreshWeather,10*60*1000);
+    setInterval(refreshTides,15*60*1000);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
+  else start();
+})();
+</script>
+
 <!-- RC7: HTTPS-hosted production test build; same approved design, optimized embedded logo -->
 </body>
 </html>
